@@ -62,7 +62,7 @@ export default function RequestGaugeForm() {
 
         const fetchGaugeUsers = async () => {
             try {
-                const res = await axios.get(`${config.api_path}/users/list?process=Qc`);
+                const res = await axios.get(`${config.api_path}/users/list/gauge?typemc=Gauge Control`);
                 if (res.data.message === "success") setGaugeUsers(res.data.result);
             } catch (e) {
                 console.error("❌ Error fetching Gauge Control users:", e);

@@ -84,6 +84,28 @@ app.get("/list", async (req, res) => {
     res.status(500).json({ message: e.message });
   }
 });
+// ✅ ดึงข้อมูลผู้ใช้งาน พร้อมกรองตาม typemc ถ้ามี
+app.get("/list/gauge", async (req, res) => {
+  try {
+    const { typemc } = req.query; // ✅ ใช้ typemc แทน process
+
+    const where = { isActive: true };
+
+    // ✅ ถ้ามีการส่ง typemc มาใน query ให้กรองข้อมูลเฉพาะนั้น
+    if (typemc) where.typemc = typemc;
+
+    const result = await UserModel.findAll({
+      where,
+      attributes: ["id", "employee", "username", "lastname", "typemc"],
+      order: [["employee", "ASC"]],
+    });
+
+    res.json({ message: "success", result });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: e.message });
+  }
+});
 
 // READ one
 app.get("/:id", async (req, res) => {

@@ -184,6 +184,8 @@ app.put("/gauge-request/update/:id", async (req, res) => {
 //   }
 // });
 
+
+
 // ✅ ลบข้อมูลตาม ID + ลบ BorrowGaugeDetail ที่เกี่ยวข้อง
 app.delete("/gauge-request/delete/:id", async (req, res) => {
   try {
