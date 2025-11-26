@@ -34,6 +34,7 @@ app.get("/", async (req, res) => {
         { username: { [Op.iLike]: `%${q}%` } },
         { lastname: { [Op.iLike]: `%${q}%` } },
         { employee: { [Op.iLike]: `%${q}%` } },
+        { typemc: { [Op.like]: `%${q}%` } },
       ];
     }
     const list = await UserModel.findAll({
@@ -45,6 +46,42 @@ app.get("/", async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "ดึงผู้ใช้ไม่สำเร็จ" });
+  }
+});
+
+// ✅ ต้องอยู่บนสุดก่อน /:id
+// app.get("/list", async (req, res) => {
+//   try {
+//     const result = await UserModel.findAll({
+//       where: { isActive: true },
+//       attributes: ["id", "employee", "username", "lastname", "typemc"],
+//       order: [["employee", "ASC"]],
+//     });
+//     res.json({ message: "success", result });
+//   } catch (e) {
+//     console.error(e);
+//     res.status(500).json({ message: e.message });
+//   }
+// });
+
+// ✅ ต้องอยู่ก่อน route /:id
+app.get("/list", async (req, res) => {
+  try {
+    const { process } = req.query; // ✅ รับค่า typemc จาก query ถ้ามี
+
+    const where = { isActive: true };
+    if (process) where.process = process; // ✅ ถ้ามี typemc ใน query ให้กรองด้วย
+
+    const result = await UserModel.findAll({
+      where,
+      attributes: ["id", "employee", "username", "lastname", "typemc"],
+      order: [["employee", "ASC"]],
+    });
+
+    res.json({ message: "success", result });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: e.message });
   }
 });
 

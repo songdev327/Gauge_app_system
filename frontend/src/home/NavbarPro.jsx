@@ -102,17 +102,17 @@ function NavbarPro() {
         </h6>
 
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li class="nav-item ">
             <a class="nav-link" data-widget="pushmenu" href=" " role="button">
-              <i class="fas fa-bars"></i>
+              <i class="fas fa-bars text-black"></i>
             </a>
           </li>
         </ul>
 
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <Link to="/homeSettings">
-              <button className="btn fw-bold text-white mr-4">
+            <Link to="/homeSetting">
+              <button className="btn fw-bold text-black mr-4">
                 {/* <i className="fa fa-user mr-2"></i> */}
                 SETTING
               </button>
@@ -131,7 +131,7 @@ function NavbarPro() {
               href="#"
               role="button"
             >
-              <i class="fas fa-expand-arrows-alt text-white"></i>
+              <i class="fas fa-expand-arrows-alt text-black"></i>
             </Link>
           </li>
         </ul>

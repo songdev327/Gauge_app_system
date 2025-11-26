@@ -1,10 +1,11 @@
-import Template from "../../home/Template";
+// import Template from "../../home/Template";
 import { Link } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ReorderIcon from '@mui/icons-material/Reorder';
 import './setting.css'
+import TemplatePro from "../../home/TemplatePro"
 
 
 function Settings() {
@@ -12,7 +13,7 @@ function Settings() {
 
   return (
     <>
-      <Template>
+      <TemplatePro>
         <div className="signup_container d-flex justify-content-center">
           {/* <div className="register-box"> */}
           <div className="signup_form w-50">
@@ -37,45 +38,53 @@ function Settings() {
                     </div>
 
                     <div className="col-md-4">
-                      <Link to="/listSparePart">
+                      <Link to="/masterIndex">
                         <button className="btn btn-success w-100">
-                          <AddBoxIcon className="mr-1"/>
-                          ADD SPARE PART
+                          <ReorderIcon className="mr-1"/>
+                           MASTER INDEX
                         </button>
                       </Link>
                     </div>
 
                     <div className="col-md-4">
-                      <Link to="/masterItemList">
+                      <Link to="/detail">
                         <button className="btn btn-success w-100">
-                          <AddBoxIcon className="mr-1"/>
-                          ADD MASTER ITEM LIST
+                          <ReorderIcon className="mr-1"/>
+                          DETAIL
                         </button>
                       </Link>
                     </div>
 
                     <div className="col-md-4">
-                      <Link to="/workGroupCode">
+                      <Link to="/partName">
                         <button className="btn btn-success w-100">
-                          <AddBoxIcon className="mr-1"/>
-                          ADD WORK GROUP CODE
+                          <ReorderIcon className="mr-1"/>
+                          PART NAME
                         </button>
                       </Link>
                     </div>
 
                     <div className="col-md-4">
-                      <Link to="/machineSerial">
+                      <Link to="/modelMaster">
                         <button className="btn btn-success w-100">
-                          <AddBoxIcon className="mr-1"/>
-                          ADD MACHINE SERIAL
+                          <ReorderIcon className="mr-1"/>
+                          MODEL
                         </button>
                       </Link>
                     </div>
                     <div className="col-md-4">
-                      <Link to="/listFormRequestSetting">
+                      <Link to="/processMaster">
+                        <button className="btn btn-success w-100">
+                          <ReorderIcon className="mr-1"/>
+                          SECTION
+                        </button>
+                      </Link>
+                    </div>
+                    <div className="col-md-4">
+                      <Link to="/borrowGaugeDetail">
                         <button className="btn btn-primary w-100">
                           <ReorderIcon className="mr-1"/>
-                          LIST REQUEST
+                          BORROW GAUGE
                         </button>
                       </Link>
                     </div>
@@ -86,7 +95,7 @@ function Settings() {
             </div>
           </div>
         </div>
-      </Template>
+      </TemplatePro>
     </>
   );
 }

@@ -1,16 +1,28 @@
 #sidebar-mm{
-    background-color: rgb(45, 45, 45);
+    background-color: rgb(231, 231, 231);
 }
-#sidebar-mm-link{
-    background-color: rgb(0, 0, 0);
+#sidebar-mm-link {
+  background-color: rgb(255, 234, 0);
+  color: black;
+  font-weight: 700;
+  display: block; /* ✅ ให้กินพื้นที่เต็ม */
+  padding: 10px 15px; /* ✅ เพิ่ม padding เพื่อให้เงาชัด */
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* ✅ เงาเข้มชัด */
+  
+}
+#sidebar-mm-link {
+  position: relative;
+  z-index: 10;
 }
 #navbar-mm{
-    background-color: rgb(45, 45, 45);
+    background-color: rgb(255, 234, 0);
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* ✅ เงาเข้มชัด */
 }
 #clock-header{
     background-color: aliceblue;
     padding: 0.4rem;
-   
+    box-shadow: 1px 1px 3px 2px rgb(67, 67, 67);
+    border-radius: 1px;
 }
 .img-list{
     border-radius: 5px;
@@ -27,7 +39,7 @@
   align-items: flex-start;
   justify-content: center;
   background: #ffffff;
-   background: linear-gradient(135deg,#ffffda,#fcffdd,#fbffde,#fafadb ,#f9faee,#fefdf0,#feffd5,#feffd4,#ffffd6,#ffffd0,#fdffcf,#fbffd9);
+  background: linear-gradient(135deg,#ffffbe,#faffc7,#f8ffc3,#ffffc7 ,#faffc3,#fffbbe,#feffb7,#feffbb,#ffffbc,#ffffb9,#fdffbc,#f8ffbc);
 }
 
 .login-shell{
@@ -39,22 +51,32 @@
   align-items: center;
 }
 
+.login-shell-s{
+  width: min(1250px, 95vw);
+  margin: 56px auto;
+  display: grid;
+  grid-template-columns: 1.25fr 420px;  /* ซ้ายใหญ่ / ขวาฟอร์ม */
+  gap: 70px;
+  align-items: center;
+}
+
 /* รูปใหญ่ด้านซ้าย */
 .login-hero{
   text-align: center;
-  
 }
+
 .login-hero img{
   width: 100%;
-  max-width: 820px;            /* << รูปใหญ่มาก */
+  max-width: 820px;          
   aspect-ratio: 4/3;
   object-fit: cover; 
   border-radius: 2px;          /* เต็มเฟรม (อาจครอปขอบนิดหน่อย) */
   /* box-shadow: 0 10px 14px 34px rgb(177, 228, 255); */
-
-  box-shadow: 2px 2px 5px 8px rgb(112, 112, 112);
+  box-shadow: 2px 2px 5px 8px rgb(163, 163, 163);
   border: #e7e7e7 solid 1px;
+  border-radius: 5px;
 }
+
 .login-hero h1{
   margin: 18px 0 6px;
   font-size: 34px;
@@ -68,20 +90,36 @@
 
 /* การ์ดฟอร์มด้านขวา */
 .login-card{
-  background: #fff;
+  background: linear-gradient(135deg,#4d85ff,#5ea6ff,#61a8ff,#8491ff,#6daefe,#5ca5ff);
   border-radius: 2px;
   padding: 28px;
+  height: 420px;
   border-radius: 5px;  
-  box-shadow: 2px 5px 5px 5px rgb(194, 194, 194);
-  border: #e7e7e7 solid 1px;
+  box-shadow: 0 0 20px rgb(169, 169, 169);
+  border: rgb(135, 135, 135) solid 1px;
 }
+
 .brand h2{
   margin: 0 0 12px;
   text-align: center;
   font-weight: 800;
   color: #1f2937;
-  background-color: #dedede;
 }
+
+.login-form-box {
+  /* background: white; */
+  background: linear-gradient(135deg,#4d85ff,#5ea6ff,#61a8ff,#8491ff,#6daefe,#5ca5ff);
+  padding: 30px;
+  width: 21.875rem;
+  height: 25rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgb(169, 169, 169);
+  display: flex;
+  flex-direction: column;
+  border: rgb(135, 135, 135) solid 1px;
+}
+
+
 
 /* Responsive: จอแคบ → เรียงบนลงล่าง */
 @media (max-width: 1024px){

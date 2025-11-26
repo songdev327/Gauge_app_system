@@ -1,3 +1,92 @@
 #card-setting{
     background-color: rgb(244, 244, 244);
 }
+#table-detail{
+    border: black;
+}
+
+.pagination-wrapper {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0.5rem 0;
+}
+
+.pagination-wrapper ul {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding-left: 0;
+}
+
+.table-bordered-black th,
+.table-bordered-black td {
+  border: 1px solid black !important;
+}
+
+/* ปรับให้กล่องแสดงผลได้เต็มหน้าจอ */
+.summary-card {
+  text-align: center;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  color: #2c3e50;
+  font-family: "Kanit", sans-serif;
+  letter-spacing: 0.5px;
+  
+  width: 100%;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+
+/* สีพื้นหลังแต่ละช่อง */
+.card-blue {
+  background-color: #44f6ff;
+  border: solid 1px rgb(163, 163, 163);
+}
+
+.card-yellow {
+  background-color: #ffe770;
+  border: solid 1px rgb(163, 163, 163);
+}
+
+.card-cyan {
+  background-color: #7ed6df;
+  border: solid 1px rgb(163, 163, 163);
+}
+
+.card-orange {
+  background-color: #ff0f0f;
+  border: solid 1px rgb(163, 163, 163);
+}
+.card-success {
+  background-color: #28ff19;
+  border: solid 1px rgb(163, 163, 163);
+}
+
+/* ปรับหัวข้อ */
+.summary-card h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+/* ปรับตัวเลข */
+.summary-card h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #007bff;
+}
+
+/* เพิ่มให้กล่องไม่เล็กเกินไปบนหน้าจอเล็ก */
+@media (max-width: 576px) {
+  .col-6 {
+    width: 100% !important;
+  }
+}

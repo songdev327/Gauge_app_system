@@ -1,0 +1,26 @@
+.modal-dialog-custom-xl {
+    max-width: 70% !important;  /* หรือกำหนด %/px ตามต้องการ */
+    /* หากต้องการปรับความสูง หรืออื่นๆ ก็เพิ่มได้ */
+  }
+  .modal-dialog-custom-xll {
+    max-width: 95%;
+    width: auto;
+  }
+  .modal-dialog-custom-xlll {
+    max-width: 75%;
+    width: auto;
+  }
+  .modal-dialog-custom-xlAF {
+    max-width: 65%;
+    width: auto;
+  }
+  .btn-close{
+    width: 35px;
+    height: 35px;
+    background-color: red;
+  }
+
+  #box{
+    border: solid black 1px;
+    border-radius: 2px 2px 5px 5px rgb(236, 236, 236);
+}

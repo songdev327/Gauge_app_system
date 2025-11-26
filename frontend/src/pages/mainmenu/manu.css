@@ -1,0 +1,102 @@
+.box{
+    border: solid black 1px;
+    border-radius: 2px 2px 5px 5px rgb(217, 217, 217);
+}
+
+.return-table {
+  font-size: 0.9rem !important;
+  border-collapse: collapse !important; /* ✅ ให้เส้นไม่ซ้อนกัน */
+  width: 100%;
+}
+
+.return-table th,
+.return-table td {
+  padding: 4px !important;
+  vertical-align: middle !important;
+  border: 1px solid black !important; /* ✅ เส้นสีดำ */
+}
+
+.return-table thead th {
+  background-color: #212529 !important; /* table-dark สีพื้นหัว */
+  color: white !important;
+  border: 1px solid black !important; /* ✅ เส้นหัวตารางดำด้วย */
+}
+
+.return-table input {
+  font-size: 0.75rem !important;
+  height: 26px !important;
+  padding: 0 !important;
+  text-align: center;
+  border: 1px solid #555 !important; /* ✅ ขอบช่อง input */
+}
+
+.table-bordered-black th,
+.table-bordered-black td {
+  border: 1px solid black !important;
+}
+
+
+/* กล่องนอกสุด */
+/* .menu-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  background-color: #f4f6f7;
+} */
+
+/* กล่องฟอร์มหลัก */
+.menu-box {
+  width: 500px;
+  background-color: #fafafa;
+  border: solid rgb(189, 189, 189);
+  border-radius: 8px;
+  box-shadow: 1px 2px 5px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 30px 40px;
+  font-family: "Kanit", sans-serif;
+  height: 380px;
+}
+
+/* หัวข้อ */
+.menu-title {
+  font-weight: bold;
+  margin-bottom: 20px; /* ลดระยะห่างระหว่างหัวข้อกับปุ่ม */
+  font-size: 2rem;
+  color: #2c3e50;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ปุ่มหลัก */
+.mainmenu-btn {
+  width: 280px;
+  height: 80px;
+  background-color: #28a745;
+  color: white;
+  font-size: 1.6rem;
+  font-weight: bold;
+  border: solid rgb(93, 93, 93) 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0, 128, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.mainmenu-btn:hover {
+  background-color: #34c759;
+  border: solid rgb(93, 93, 93) 1px;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 128, 0, 0.4);
+}
+
+/* เมื่อคลิก */
+.mainmenu-btn:active {
+  transform: translateY(1px);
+  border: solid rgb(93, 93, 93) 1px;
+  box-shadow: 0 4px 10px rgba(0, 128, 0, 0.3);
+}
+
+#icon-list{
+  font-size: 3rem;
+}

@@ -19,7 +19,7 @@ function HomeSetting() {
     e.preventDefault();
     setErr("");
     if (!password || !process) {
-      setErr("กรุณากรอกชื่อผู้ใช้ รหัสผ่าน และเลือก Process");
+       setErr("กรุณาเลือก Process และ กรอกรหัสผ่าน");
       return;
     }
 
@@ -35,9 +35,9 @@ function HomeSetting() {
         return;
       }
 
-      if (["Production", "Engineer", "Qc"].includes(process)) {
-        navigate("/SettingToProduct", { replace: true });
-      } else if (process === "Maintenance") {
+      if (["Production", "Qc"].includes(process)) {
+        navigate("/Settings", { replace: true });
+      } else if (process === "Qc") {
         navigate("/Settings", { replace: true });
       } else {
         setErr("Process ไม่ถูกต้อง");
@@ -54,12 +54,12 @@ function HomeSetting() {
   return (
     <>
       <div className="login-wrap">
-        <div className="login-shell">
+        <div className="login-shell-s">
           {/* ซ้าย: รูปใหญ่ + หัวข้อ */}
           <aside className="login-hero" aria-hidden="true">
             {/* <img src={hero} alt="Factory maintenance" /> */}
-            <h1>Application Request Maintenance System</h1>
-            <p>ระบบใบร้องขอการบำรุงรักษา</p>
+           <h1>Application Gauge Control System</h1>
+            
           </aside>
 
           {/* ขวา: การ์ดฟอร์ม */}
@@ -81,9 +81,7 @@ function HomeSetting() {
                 >
                   <option value="">-- Select Process --</option>
                   <option value="Production">Production</option>
-                  <option value="Engineer">Engineer</option>
                   <option value="Qc">Qc</option>
-                  <option value="Maintenance">Maintenance</option>
                 </select>
               </div>
 
@@ -109,14 +107,14 @@ function HomeSetting() {
 
               {err && <div className="alert alert-danger py-2 my-2">{err}</div>}
 
-              <button className="btn btn-primary w-100" disabled={loading} type="submit">
+              <button className="btn btn-warning w-100 mt-4" disabled={loading} type="submit">
                 {loading ? "Signing in..." : "Sign in"}
               </button>
             </form>
-            <Link to="/dashboardMM">
+            <Link to="/dashboardProduct">
               <button
                 type="button"
-                className="btn btn-danger mt-3"
+                className="btn btn-danger mt-4"
               >
                 ← BACK
               </button> </Link>

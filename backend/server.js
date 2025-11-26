@@ -8,7 +8,7 @@ const app = express();
 
 // const fs = require('fs'); // Update data base
 // const path = require('path'); // Update data base
-// const SparePart = require('./models/MachineSerialModel'); // Update data base
+// const MasterIndex = require('./models/DetailModel'); // Update data base
 
 //-------------- End Update data base --------------------------------------------------------------
 
@@ -37,9 +37,9 @@ app.use(express.json());
 // const io = new Server(server, {
 //   cors: {
 //     origin: [
-//       'http://localhost:3005',
-//       'http://10.120.123.25:3005',
-//       'http://192.168.96.126:3005',
+//       'http://localhost:3006',
+//       'http://10.120.123.25:3006',
+//       'http://192.168.96.126:3006',
 //     ],
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //     credentials: true,
@@ -50,9 +50,9 @@ app.use(express.json());
 // // ========== CORS ==========
 // const corsOptions = {
 //   origin: [
-//     'http://localhost:3005',
-//     'http://10.120.123.25:3005',
-//     'http://192.168.96.126:3005',
+//     'http://localhost:3006',
+//     'http://10.120.123.25:3006',
+//     'http://192.168.96.126:3006',
 //   ],
 //   credentials: true,
 // };
@@ -67,35 +67,43 @@ app.use(express.json());
 //------ End Run server on Linux ----------------------------------
 
 
-require('./models/MaintenanceModel');
+
 require('./models/UserModel');  
-require('./models/ListSparePartModel');  
-require('./models/MasterItemListModel');  
-require('./models/WorkGroupCodeModel');  
-require('./models/MachineSerialModel');  
+require('./models/GaugeRequestModel');  
+require("./models/MasterIndexModel"); // ✅ เพิ่ม model
+require("./models/DetailModel"); // ✅ เพิ่ม model
+require("./models/BorrowGaugeDetailModel"); 
+require("./models/PartNameModel"); 
+require("./models/ModelMasterModel"); 
+require("./models/ProcessModel"); 
+
 // ---- Auth ----
 const Auth = require('./controllers/AuthController'); // ✅ ได้เป็นฟังก์ชัน (app)
-const Menu = require('./controllers/MenuController'); // ✅ เพิ่มตรงนี้
-app.use('/auth', Auth);    
-app.use('/menu', Menu);   // ✅ API สำหรับเมนู
 
-app.use('/Maintenance', require('./controllers/MaintenanceController'));
+app.use('/auth', Auth);    
+
+
+
 app.use('/users', require('./controllers/UserController')); 
-app.use('/SparePart', require('./controllers/ListSparePartController')); 
-app.use('/MasterList', require('./controllers/MasterItemListController')); 
-app.use('/WorkGroup', require('./controllers/WorkGroupCodeController')); 
-app.use('/MachineSerial', require('./controllers/MachineSerialController'));
+app.use("/", require("./controllers/GaugeRequestController"));
+app.use(require("./controllers/MasterIndexController"));
+app.use(require("./controllers/DetailController"));
+app.use(require("./controllers/BorrowGaugeDetailController"));
+app.use(require("./controllers/PartNameController"));
+app.use(require("./controllers/ModelMasterController"));
+app.use(require("./controllers/ProcessController"));
+
+
 
 //-------------- Start Update data base --------------------------------------------------------------
-// อ่านข้อมูลจากไฟล์ JSON และเพิ่มข้อมูลเข้าสู่ฐานข้อมูล // Update data base
-// const loadSparePartsData = async () => {
+// // อ่านข้อมูลจากไฟล์ JSON และเพิ่มข้อมูลเข้าสู่ฐานข้อมูล // Update data base
+// const loadDetailData = async () => {
 //   try {
-//     const data = fs.readFileSync(path.join(__dirname, 'machineSerial.json'), 'utf-8');
-//     const spareParts = JSON.parse(data);
+//     const data = fs.readFileSync(path.join(__dirname, 'data', 'Detail_pretty.json'), 'utf-8');
+//     const detailData = JSON.parse(data);
 
-//     // เพิ่มข้อมูลทั้งหมดในไฟล์ JSON เข้าไปในฐานข้อมูล
-//     for (const part of spareParts) {
-//       await SparePart.create(part);
+//     for (const part of detailData) {
+//       await MasterIndex.create(part);
 //     }
 //     console.log('✅ Spare parts data loaded successfully');
 //   } catch (err) {
@@ -103,8 +111,7 @@ app.use('/MachineSerial', require('./controllers/MachineSerialController'));
 //   }
 // };
 
-// // โหลดข้อมูลเมื่อเริ่มต้น
-// loadSparePartsData();
+// loadDetailData();
 
 //-------------- End Update data base ---------------------------------------------------
 
@@ -127,7 +134,7 @@ app.use('/MachineSerial', require('./controllers/MachineSerialController'));
     await conn.sync({ alter: true });
     console.log('✅ DB synced');
 
-    const port = 3005;
+    const port = 3006;
     server.listen(port, () => {
       console.log(`🚀 Server listening on http://localhost:${port}`);
     });
