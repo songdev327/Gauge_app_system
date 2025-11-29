@@ -84,6 +84,7 @@ app.get("/list", async (req, res) => {
     res.status(500).json({ message: e.message });
   }
 });
+
 // ✅ ดึงข้อมูลผู้ใช้งาน พร้อมกรองตาม typemc ถ้ามี
 app.get("/list/gauge", async (req, res) => {
   try {

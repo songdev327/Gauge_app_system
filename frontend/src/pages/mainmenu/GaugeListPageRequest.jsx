@@ -305,8 +305,8 @@ export default function GaugeList() {
 
             <div className="content-wrapper">
 
-                <h2 className="fw-bold mb-4"> <ListAltIcon id="icon-list"/> รายการขอยืม Gauge
-                     ⏱<span style={{ color: "rgba(244, 244, 244, 1)"}}>{formatTime(countdown)}</span>
+                <h2 className="fw-bold mb-4"> <ListAltIcon id="icon-list" /> รายการขอยืม Gauge
+                    ⏱<span style={{ color: "rgba(244, 244, 244, 1)" }}>{formatTime(countdown)}</span>
                 </h2>
 
                 {/* 🔍 Filter */}
@@ -450,15 +450,6 @@ export default function GaugeList() {
                                         />
                                         <label className="fw-semibold">S/N</label>
 
-                                        {/* <input
-                                            type="text"
-                                            className="col-3 form-control text-primary ml-2"
-                                            style={{ width: "180px" }}
-                                            value={snInput}
-                                            onChange={(e) => setSnInput(e.target.value)}
-                                            placeholder="กรอก S/N"
-                                        /> */}
-
                                         <div className="position-relative" style={{ marginRight: "20px" }}>
                                             <input
                                                 type="text"
@@ -500,14 +491,6 @@ export default function GaugeList() {
                                         />
                                         <label className="fw-semibold ml-2">Control No.</label>
 
-                                        {/* <input
-                                            type="text"
-                                            className="col-3 form-control text-primary ml-2"
-                                            style={{ width: "180px" }}
-                                            value={controlInput}
-                                            onChange={(e) => setControlInput(e.target.value)}
-                                            placeholder="กรอก Control No."
-                                        /> */}
 
                                         {/* ▼ ช่อง Control No. */}
                                         <div className="position-relative">
@@ -547,9 +530,9 @@ export default function GaugeList() {
                                             onClick={async () => {
                                                 let keyword = "";
                                                 if (searchType === "sn") keyword = snInput.trim();
-                                                // if (searchType === "item") keyword = itemInput.trim();
                                                 if (searchType === "control") keyword = controlInput.trim();
 
+                                                // ❌ ไม่เลือกประเภทหรือไม่กรอกข้อมูล
                                                 if (!searchType || keyword === "") {
                                                     Swal.fire({
                                                         title: "ข้อมูลไม่ครบ!",
@@ -563,12 +546,13 @@ export default function GaugeList() {
                                                 try {
                                                     const res = await axios.get(`${config.api_path}/detail/search/${searchType}/${keyword}`);
 
+                                                    // ✅ กรณีค้นหาสำเร็จ
                                                     if (res.data.message === "success") {
                                                         const data = res.data.result;
                                                         setDetailData(data);
                                                         setScrapValue(data.scrap || "");
 
-                                                        // ✅ เพิ่มข้อมูลเข้า table ด้านล่าง
+                                                        // ✅ เพิ่มข้อมูลเข้า table ด้านล่าง (ถ้าไม่ซ้ำ)
                                                         setDetailItems((prev) => {
                                                             if (prev.some((p) => p.serial === data.Serial)) return prev;
                                                             return [
@@ -584,31 +568,48 @@ export default function GaugeList() {
                                                             ];
                                                         });
 
-                                                        // ✅ แสดง Swal พร้อม Serial และ Control No
+                                                        // ✅ แสดงผลสำเร็จ
                                                         Swal.fire({
                                                             title: "สำเร็จ!",
                                                             html: `
-                                                                    <div style="font-size: 1.1rem;">
-                                                                    พบข้อมูล Gauge ที่ค้นหาแล้ว<br/>
-                                                                    <b>Serial:</b> ${data.Serial || "-"}<br/>
-                                                                    <b>Control No:</b> ${data.control || "-"}
-                                                                    </div>
-                                                                `,
+            <div style="font-size: 1.1rem;">
+              พบข้อมูล Gauge ที่ค้นหาแล้ว<br/>
+              <b>Serial:</b> ${data.Serial || "-"}<br/>
+              <b>Control No:</b> ${data.control || "-"}
+            </div>
+          `,
                                                             icon: "success",
                                                             timer: 1500,
                                                             showConfirmButton: false,
                                                         });
-                                                    } else if (res.data.message === "scrapped") {
+                                                    }
+
+                                                    // ⚠️ ถ้าถูก Scrap แล้ว
+                                                    else if (res.data.message === "scrapped") {
                                                         setScrapValue(res.data.scrap || "-");
                                                         setDetailData(null);
-
                                                         Swal.fire({
                                                             title: "ไม่สามารถเบิกได้!",
                                                             text: "⚠️ Gauge นี้ถูก Scrap แล้ว",
                                                             icon: "error",
                                                             confirmButtonText: "ตกลง",
                                                         });
-                                                    } else {
+                                                    }
+
+                                                    // ⚠️ ถ้ามี Doc No แล้ว (ถูกเบิกไปแล้ว)
+                                                    else if (res.data.message === "issued") {
+                                                        setDetailData(null);
+                                                        setScrapValue("");
+                                                        Swal.fire({
+                                                            title: "ไม่สามารถเบิกได้!",
+                                                            text: `Gauge นี้ถูกเบิกไปแล้ว (Doc No: ${res.data.doc_no})`,
+                                                            icon: "warning",
+                                                            confirmButtonText: "ตกลง",
+                                                        });
+                                                    }
+
+                                                    // ❌ ไม่พบข้อมูล
+                                                    else if (res.data.message === "not found") {
                                                         setDetailData(null);
                                                         setScrapValue("");
                                                         Swal.fire({
@@ -618,13 +619,25 @@ export default function GaugeList() {
                                                             confirmButtonText: "ตกลง",
                                                         });
                                                     }
+
+                                                    // ❌ อื่น ๆ
+                                                    else {
+                                                        setDetailData(null);
+                                                        setScrapValue("");
+                                                        Swal.fire({
+                                                            title: "เกิดข้อผิดพลาด!",
+                                                            text: "ไม่สามารถค้นหาข้อมูลได้",
+                                                            icon: "error",
+                                                            confirmButtonText: "ตกลง",
+                                                        });
+                                                    }
                                                 } catch (e) {
                                                     console.error(e);
                                                     setDetailData(null);
                                                     setScrapValue("");
                                                     Swal.fire({
                                                         title: "เกิดข้อผิดพลาด!",
-                                                        text: "ไม่สามารถค้นหาข้อมูลได้",
+                                                        text: "❌ ไม่พบรายการที่ค้นหา",
                                                         icon: "error",
                                                         confirmButtonText: "ตกลง",
                                                     });

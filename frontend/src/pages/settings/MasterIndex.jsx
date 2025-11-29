@@ -270,7 +270,7 @@ export default function MasterIndexPage() {
         <>
             <div className="mt-4">
 
-                <h2 className="ml-2 fw-bold">MASTER INDEX MANAGEMENT</h2>
+                <h2 className="ml-2 fw-bold">INDEX MANAGEMENT</h2>
 
                 <div className="mb-2">
                     <button className="btn btn-danger ml-2"

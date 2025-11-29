@@ -84,6 +84,55 @@
   color: #007bff;
 }
 
+/* .signup_container {
+  background: linear-gradient(180deg, #d2ddf9, #e1e7f1);
+  min-height: 100vh;
+} */
+
+/* 🎛️ กล่องหลักของ Setting */
+#card-setting {
+  border-radius: 15px; /* ขอบโค้งมน */
+  box-shadow: 1px 1px 3px 4px rgb(200, 200, 200); /* เงานุ่ม */
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(145deg, #ffffff, #f7f7f7);
+ 
+}
+
+/* ✨ ปุ่มพื้นฐาน */
+#card-setting .btn {
+  font-size: 1.3rem;               /* ขยายขนาดตัวอักษร */
+  font-weight: bold;
+  padding: 18px 20px;              /* ขยายขนาดปุ่ม */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* เงาเริ่มต้น */
+  transition: all 0.25s ease-in-out; /* ทำให้ hover นุ่ม */
+}
+
+/* 🌿 ปุ่มสีเขียว */
+#card-setting .btn-success {
+  background: linear-gradient(135deg, #068e0a, #21a400);
+  border: solid rgb(93, 93, 93) 1px;
+}
+
+/* 🔵 ปุ่มสีน้ำเงิน */
+#card-setting .btn-primary {
+  background: linear-gradient(135deg, #0623c3, #1e53d9);
+  border: solid rgb(93, 93, 93) 1px;
+}
+
+/* ✨ เอฟเฟกต์เมื่อ hover */
+#card-setting .btn:hover {
+  transform: translateY(-5px); /* ยกขึ้นเล็กน้อย */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* เพิ่มเงา */
+  filter: brightness(1.1); /* เพิ่มความสว่าง */
+}
+
+/* 🖱️ เอฟเฟกต์ตอนกด (active) */
+#card-setting .btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
 /* เพิ่มให้กล่องไม่เล็กเกินไปบนหน้าจอเล็ก */
 @media (max-width: 576px) {
   .col-6 {

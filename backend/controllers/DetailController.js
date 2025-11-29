@@ -4,44 +4,71 @@ const DetailModel = require("../models/DetailModel");
 const ExcelJS = require("exceljs");
 const { Op } = require("sequelize");
 
-// ✅ ค้นหาข้อมูลจาก Serial
+
 app.get("/detail/search/:type/:keyword", async (req, res) => {
   try {
+
     const { type, keyword } = req.params;
 
-    // 🧩 สร้างเงื่อนไขค้นหาตาม type
+    // 🧩 เงื่อนไขค้นหา
     let whereCondition = {};
-    if (type === "sn") {
-      whereCondition = { Serial: keyword };
-    } else if (type === "item") {
-      whereCondition = { name: keyword };
-    } else if (type === "control") {
-      whereCondition = { control: keyword };
-    } else {
-      return res.status(400).send({ message: "invalid search type" });
-    }
+    if (type === "sn") whereCondition = { Serial: keyword };
+    else if (type === "item") whereCondition = { name: keyword };
+    else if (type === "control") whereCondition = { control: keyword };
+    else return res.status(400).send({ message: "invalid search type" });
 
-    // 🔍 ค้นหาข้อมูล
-    const result = await DetailModel.findOne({ where: whereCondition });
+    // ✅ ต้องใช้ Op.and เพื่อไม่ให้ [Op.or] ทับกัน
+    const result = await DetailModel.findOne({
+      where: {
+        ...whereCondition,
+        [Op.and]: [
+          {
+            [Op.or]: [{ scrap: null }, { scrap: "" }],
+          },
+          {
+            [Op.or]: [{ doc_no: null }, { doc_no: "" }],
+          },
+        ],
+      },
 
+      // limit: 100,
+
+    });
+
+    // ❌ ไม่พบข้อมูล
     if (!result) {
+      // ลองค้นอีกครั้งแบบไม่กรอง เพื่อเช็กว่ามีอยู่แต่ถูกยืมหรือ scrap แล้ว
+      const existing = await DetailModel.findOne({ where: whereCondition });
+
+      if (existing) {
+        if (existing.scrap && existing.scrap.trim() !== "") {
+          return res.status(200).send({
+            message: "scrapped",
+            scrap: existing.scrap,
+          });
+        }
+
+        if (existing.doc_no && existing.doc_no.trim() !== "") {
+          return res.status(200).send({
+            message: "issued",
+            doc_no: existing.doc_no,
+          });
+        }
+      }
+
       return res.status(404).send({ message: "not found" });
     }
 
-    // ⚠️ ถ้ามีค่า scrap แล้ว ห้ามนำไปใช้งาน
-    if (result.scrap && result.scrap.trim() !== "") {
-      return res.status(200).send({
-        message: "scrapped",
-        scrap: result.scrap,
-      });
-    }
-
-    // ✅ ถ้า scrap ว่าง → ส่งข้อมูลเต็ม
+    // ✅ ถ้าเจอและผ่านทุกเงื่อนไข
     res.send({ message: "success", result });
+
   } catch (e) {
+    console.error("❌ Error:", e);
     res.status(500).send({ message: e.message });
   }
 });
+
+
 
 
 app.get("/detail/autocomplete/sn/:keyword", async (req, res) => {
@@ -52,7 +79,7 @@ app.get("/detail/autocomplete/sn/:keyword", async (req, res) => {
         Serial: { [Op.iLike]: `%${keyword}%` },
       },
       attributes: ["Serial"],
-      limit: 10,
+      //limit: 100,
     });
     res.json({ message: "success", result });
   } catch (err) {
@@ -69,7 +96,7 @@ app.get("/detail/autocomplete/control/:keyword", async (req, res) => {
         control: { [Op.iLike]: `%${keyword}%` },
       },
       attributes: ["control"],
-      limit: 10,
+      //limit: 100,
     });
     res.json({ message: "success", result });
   } catch (err) {

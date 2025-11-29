@@ -88,25 +88,27 @@ export default function Dashboard() {
           {/* สรุปข้อมูล */}
           <div className="row mb-4">
             <div className="col-md-3">
-              <div className="stat-total p-3 rounded text-center" style={{ backgroundColor: "#8e44ad" }}>
+              <div className="stat-total p-3 rounded text-center" id="doc-no" 
+              style={{ backgroundColor: "#8e44ad" }}
+              >
                 <h5 className="fw-bold text-white">DOC NO</h5>
                 <h3 className="fw-bold text-white">{totalDocNo}</h3>
               </div>
             </div>
             <div className="col-md-3">
-              <div className="stat-total p-3 rounded text-center" style={{ backgroundColor: "#007bff" }}>
+              <div className="stat-total p-3 rounded text-center" id="total-record" style={{ backgroundColor: "#007bff" }}>
                 <h5 className="fw-bold text-white">TOTAL RECORDS</h5>
                 <h3 className="fw-bold text-white">{totalRecords}</h3>
               </div>
             </div>
             <div className="col-md-3">
-              <div className="stat-total p-3 rounded text-center" style={{ backgroundColor: "#28a745" }}>
+              <div className="stat-total p-3 rounded text-center" id="return-gauge" style={{ backgroundColor: "#28a745" }}>
                 <h5 className="fw-bold text-white">RETURNED GAUGE</h5>
                 <h3 className="fw-bold text-white">{totalReturned}</h3>
               </div>
             </div>
             <div className="col-md-3">
-              <div className="stat-total p-3 rounded text-center" style={{ backgroundColor: "#ff723fff" }}>
+              <div className="stat-total p-3 rounded text-center" id="scrap-date" style={{ backgroundColor: "#ff723fff" }}>
                 <h5 className="fw-bold text-white">SCRAP DATE COUNT</h5>
                 <h3 className="fw-bold text-white">{scrapCount}</h3>
               </div>

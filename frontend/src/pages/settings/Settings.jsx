@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import AddBoxIcon from '@mui/icons-material/AddBox';
 import ReorderIcon from '@mui/icons-material/Reorder';
 import './setting.css'
 import TemplatePro from "../../home/TemplatePro"
@@ -41,7 +40,7 @@ function Settings() {
                       <Link to="/masterIndex">
                         <button className="btn btn-success w-100">
                           <ReorderIcon className="mr-1"/>
-                           MASTER INDEX
+                           INDEX
                         </button>
                       </Link>
                     </div>
@@ -55,7 +54,7 @@ function Settings() {
                       </Link>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-4 mt-3">
                       <Link to="/partName">
                         <button className="btn btn-success w-100">
                           <ReorderIcon className="mr-1"/>
@@ -64,7 +63,7 @@ function Settings() {
                       </Link>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-4 mt-3">
                       <Link to="/modelMaster">
                         <button className="btn btn-success w-100">
                           <ReorderIcon className="mr-1"/>
@@ -72,7 +71,7 @@ function Settings() {
                         </button>
                       </Link>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4 mt-3">
                       <Link to="/processMaster">
                         <button className="btn btn-success w-100">
                           <ReorderIcon className="mr-1"/>
@@ -80,7 +79,7 @@ function Settings() {
                         </button>
                       </Link>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-4 mt-3">
                       <Link to="/borrowGaugeDetail">
                         <button className="btn btn-primary w-100">
                           <ReorderIcon className="mr-1"/>

@@ -315,19 +315,39 @@ export default function RequestGaugeForm() {
                     <div className="row mb-3 mt-4">
                         <div className="col-3">
                             <span className="ml-2 fw-bold">Request Gauge By</span>
-                            <select
-                                className="form-control text-primary"
-                                name="requestBy"
-                                onChange={handleSelectUser}
-                                value={formData.requestBy}
-                            >
-                                <option value="">Select...</option>
-                                {users.map((user) => (
-                                    <option key={user.id} value={user.employee}>
-                                        {user.employee}
-                                    </option>
-                                ))}
-                            </select>
+                            <Select
+                                options={users.map((u) => ({
+                                    value: u.employee,
+                                    label: u.employee,
+                                }))}
+                                value={
+                                    formData.requestBy
+                                        ? { value: formData.requestBy, label: formData.requestBy }
+                                        : null
+                                }
+                                onChange={(selected) => {
+                                    const selectedUser = users.find(
+                                        (u) => u.employee === selected?.value
+                                    );
+                                    setFormData({
+                                        ...formData,
+                                        requestBy: selected?.value || "",
+                                        name: selectedUser?.username || "",
+                                        lastname: selectedUser?.lastname || "",
+                                        section: selectedUser?.typemc || "",
+                                    });
+                                }}
+                                placeholder="พิมพ์รหัสพนักงาน..."
+                                isSearchable
+                                isClearable
+                                styles={{
+                                    control: (base) => ({
+                                        ...base,
+                                        minHeight: "36px",
+                                        fontSize: "0.9rem",
+                                    }),
+                                }}
+                            />
                         </div>
                         <div className="col-2">
                             <span className="text-white">-</span>
@@ -420,21 +440,43 @@ export default function RequestGaugeForm() {
                     </div>
 
                     <div className="row mb-3 mt-4">
+
                         <div className="col-3">
                             <span className="ml-2 fw-bold">Issue Gauge By:</span>
-                            <select
-                                className="form-control text-primary"
-                                name="issueBy"
-                                onChange={handleSelectIssueUser}
-                                value={formData.issueBy}
-                            >
-                                <option value="">Select...</option>
-                                {gaugeUsers.map((user) => (
-                                    <option key={user.id} value={user.employee}>
-                                        {user.employee}
-                                    </option>
-                                ))}
-                            </select>
+                            <Select
+                                options={gaugeUsers.map((u) => ({
+                                    value: u.employee,
+                                    label: u.employee,
+                                }))}
+                                value={
+                                    formData.issueBy
+                                        ? { value: formData.issueBy, label: formData.issueBy }
+                                        : null
+                                }
+                                onChange={(selected) => {
+                                    const selectedUser = gaugeUsers.find(
+                                        (u) => u.employee === selected?.value
+                                    );
+
+                                    setFormData({
+                                        ...formData,
+                                        issueBy: selected?.value || "",
+                                        name_issue: selectedUser?.username || "",
+                                        lastname_issue: selectedUser?.lastname || "",
+                                        typemc_issue: selectedUser?.typemc || "",
+                                    });
+                                }}
+                                placeholder="พิมพ์รหัสพนักงาน..."
+                                isSearchable
+                                isClearable
+                                styles={{
+                                    control: (base) => ({
+                                        ...base,
+                                        minHeight: "36px",
+                                        fontSize: "0.9rem",
+                                    }),
+                                }}
+                            />
                         </div>
                         <div className="col-2">
                             <span className="text-white">-</span>
@@ -460,25 +502,49 @@ export default function RequestGaugeForm() {
                                 readOnly
                             />
                         </div>
+
                     </div>
 
                     <div className="row mb-3 mt-4">
+
                         <div className="col-3">
                             <span className="ml-2 fw-bold">Received Gauge By:</span>
-                            <select
-                                className="form-control text-primary"
-                                name="receivedBy"
-                                onChange={handleSelectUserReceive}
-                                value={formData.receivedBy}
-                            >
-                                <option value="">Select...</option>
-                                {users.map((user) => (
-                                    <option key={user.id} value={user.employee}>
-                                        {user.employee}
-                                    </option>
-                                ))}
-                            </select>
+                            <Select
+                                options={users.map((u) => ({
+                                    value: u.employee,
+                                    label: u.employee,
+                                }))}
+                                value={
+                                    formData.receivedBy
+                                        ? { value: formData.receivedBy, label: formData.receivedBy }
+                                        : null
+                                }
+                                onChange={(selected) => {
+                                    const selectedUser = users.find(
+                                        (u) => u.employee === selected?.value
+                                    );
+
+                                    setFormData({
+                                        ...formData,
+                                        receivedBy: selected?.value || "",
+                                        name_received: selectedUser?.username || "",
+                                        lastname_received: selectedUser?.lastname || "",
+                                        typemc_received: selectedUser?.typemc || "",
+                                    });
+                                }}
+                                placeholder="พิมพ์รหัสพนักงาน..."
+                                isSearchable
+                                isClearable
+                                styles={{
+                                    control: (base) => ({
+                                        ...base,
+                                        minHeight: "36px",
+                                        fontSize: "0.9rem",
+                                    }),
+                                }}
+                            />
                         </div>
+
                         <div className="col-2">
                             <span className="text-white">--</span>
                             <input

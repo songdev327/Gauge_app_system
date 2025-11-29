@@ -1,9 +1,43 @@
-// app/BorrowGaugeDetailRoute.js
+//BorrowGaugeDetailRoute.js
 const express = require("express");
 const app = express.Router();
 const ExcelJS = require("exceljs");
 const BorrowGaugeDetailModel = require("../models/BorrowGaugeDetailModel");
 const GaugeRequestModel = require("../models/GaugeRequestModel");
+
+const DetailModel = require("../models/DetailModel"); // ✅ เพิ่ม import model นี้
+
+const { Op } = require("sequelize");
+
+// ✅ เพิ่มข้อมูลหลายรายการ
+// app.post("/addMany", async (req, res) => {
+//   try {
+//     const { doc_No, items } = req.body;
+
+//     if (!doc_No || !Array.isArray(items) || items.length === 0) {
+//       return res.status(400).json({ message: "ข้อมูลไม่ถูกต้อง" });
+//     }
+
+//     // ✅ สร้าง records สำหรับ insert
+//     const records = items.map((item) => ({
+//       doc_No,
+//       item_no: item.itemNo,
+//       item_name: item.itemName,
+//       qty: item.qty,
+//       serial: item.serial,
+//       control: item.controlNo,
+//       model: item.typeModel,
+//     }));
+
+//     // ✅ บันทึกลงฐานข้อมูล
+//     await BorrowGaugeDetailModel.bulkCreate(records);
+
+//     res.json({ message: "เพิ่มข้อมูลสำเร็จ", count: records.length });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "ไม่สามารถเพิ่มข้อมูลได้", error: error.message });
+//   }
+// });
 
 // ✅ เพิ่มข้อมูลหลายรายการ
 app.post("/addMany", async (req, res) => {
@@ -25,17 +59,73 @@ app.post("/addMany", async (req, res) => {
       model: item.typeModel,
     }));
 
-    // ✅ บันทึกลงฐานข้อมูล
+    // ✅ บันทึกลง BorrowGaugeDetailModel
     await BorrowGaugeDetailModel.bulkCreate(records);
 
-    res.json({ message: "เพิ่มข้อมูลสำเร็จ", count: records.length });
+    // ✅ อัปเดตตาราง DetailModel ใส่ doc_no
+    let updateCount = 0;
+    for (const item of items) {
+      const [affected] = await DetailModel.update(
+        { doc_no: doc_No },
+        {
+          where: {
+            [Op.or]: [
+              { Serial: item.serial },
+              { control: item.controlNo },
+            ],
+          },
+        }
+      );
+      if (affected > 0) updateCount++;
+    }
+
+    res.json({
+      message: "เพิ่มข้อมูลสำเร็จ",
+      count: records.length,
+      updated_detail: updateCount,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "ไม่สามารถเพิ่มข้อมูลได้", error: error.message });
+    res.status(500).json({
+      message: "ไม่สามารถเพิ่มข้อมูลได้",
+      error: error.message,
+    });
   }
 });
 
-// ✅ อัปเดตสถานะ Return Gauge
+// // ✅ อัปเดตสถานะ Return Gauge
+// app.put("/borrow/update-return", async (req, res) => {
+//   try {
+//     const { doc_No, items, rec_return, name_rec, lastname_rec, typemc_rec, date_re } = req.body;
+
+//     if (!doc_No || !Array.isArray(items) || items.length === 0) {
+//       return res.status(400).json({ message: "ข้อมูลไม่ถูกต้อง" });
+//     }
+
+//     let count = 0;
+//     for (const item of items) {
+//       const result = await BorrowGaugeDetailModel.update(
+//         {
+//           return: "Y",
+//           rec_return: rec_return || null,
+//           name_rec: name_rec || null,
+//           lastname_rec: lastname_rec || null,
+//           typemc_rec: typemc_rec || null,
+//           date_re: date_re || null,
+//         },
+//         { where: { doc_No, serial: item.serial } }
+//       );
+
+//       if (result[0] > 0) count++;
+//     }
+
+//     res.json({ message: "success", count });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "error", error: error.message });
+//   }
+// });
+
 app.put("/borrow/update-return", async (req, res) => {
   try {
     const { doc_No, items, rec_return, name_rec, lastname_rec, typemc_rec, date_re } = req.body;
@@ -45,7 +135,10 @@ app.put("/borrow/update-return", async (req, res) => {
     }
 
     let count = 0;
+    let resetCount = 0;
+
     for (const item of items) {
+      // ✅ อัปเดต BorrowGaugeDetailModel ให้ return = 'Y'
       const result = await BorrowGaugeDetailModel.update(
         {
           return: "Y",
@@ -58,15 +151,44 @@ app.put("/borrow/update-return", async (req, res) => {
         { where: { doc_No, serial: item.serial } }
       );
 
-      if (result[0] > 0) count++;
+      if (result[0] > 0) {
+        count++;
+
+        // ✅ อัปเดต DetailModel ให้เคลียร์ doc_no (ระบุชื่อคอลัมน์ที่ตรงกับ DB)
+        const [affected] = await DetailModel.update(
+          { doc_no: null },
+          {
+            where: {
+              [Op.and]: [
+                {
+                  [Op.or]: [
+                    { control: item.control },
+                    // ✅ ใช้ col("Serial") เพื่อชี้คอลัมน์ตัวใหญ่จริงในฐานข้อมูล
+                    { Serial: item.serial },
+                  ],
+                },
+                { doc_no: String(doc_No) },
+              ],
+            },
+          }
+        );
+
+        if (affected > 0) resetCount++;
+      }
     }
 
-    res.json({ message: "success", count });
+    res.json({
+      message: "success",
+      count,
+      reset_doc_no: resetCount,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("❌ update-return error:", error);
     res.status(500).json({ message: "error", error: error.message });
   }
 });
+
+
 
 
 // ✅ ดึงข้อมูลทั้งหมด

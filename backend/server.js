@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const conn = require('./connect');   
 const app = express();
+const port = 3006;
+
 
 
 //-------------- Start Update data base ----------------------------------------------------
@@ -13,58 +15,39 @@ const app = express();
 //-------------- End Update data base --------------------------------------------------------------
 
 
-const http = require('http');
-const server = http.createServer(app);
-const { Server } = require('socket.io');
-const io = new Server(server, {
-  cors: {
-    origin: '*', // หรือใส่เฉพาะโดเมน front-end ของคุณ
-    methods: ['GET','POST','PUT','DELETE']
-  }
-});
-app.set('io', io);
+
+//---- Start ใช้สำหรับ Run Build ---------------------------------------------------
+
+// const path = require("path");
+
+//---- End ใช้สำหรับ Run Build ---------------------------------------------------
+
 app.use(cors());
-app.use(express.json());
 
 
 
-//------ Start Run server on Linux ----------------------------------
-// const http = require('http');
-// const server = http.createServer(app);
 
-// // ========== SOCKET.IO CONFIG ==========
-// const { Server } = require('socket.io');
-// const io = new Server(server, {
-//   cors: {
-//     origin: [
-//       'http://localhost:3006',
-//       'http://10.120.123.25:3006',
-//       'http://192.168.96.126:3006',
-//     ],
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     credentials: true,
-//   },
-// });
-// app.set('io', io); // ส่งไปใช้ใน controller
+//---- Start ใช้สำหรับ Run Build ---------------------------------------------------
 
-// // ========== CORS ==========
 // const corsOptions = {
 //   origin: [
-//     'http://localhost:3006',
-//     'http://10.120.123.25:3006',
-//     'http://192.168.96.126:3006',
+//     'http://localhost:3006',           // local dev
+//     'http://10.120.123.25:3006',       // IP ที่คุณต้องการอนุญาต
+//     'http://192.168.96.124:3006'       // ปัจจุบันที่คุณใช้
 //   ],
-//   credentials: true,
+//   credentials: true
 // };
 // app.use(cors(corsOptions));
 
-// app.use(express.json());
+//---- End ใช้สำหรับ Run Build ---------------------------------------------------
 
-// // ========== React Build ==========
-// const path = require("path");
+app.use(express.json());
+
+//---- Start ใช้สำหรับ Run Build ---------------------------------------------------
+
 // app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-//------ End Run server on Linux ----------------------------------
+//---- End ใช้สำหรับ Run Build ---------------------------------------------------
 
 
 
@@ -115,6 +98,8 @@ app.use(require("./controllers/ProcessController"));
 
 //-------------- End Update data base ---------------------------------------------------
 
+
+
 //------ Start Run server on Linux -------------------------------------------
 
 // ========== Fallback to React (สำหรับ React Router) ==========
@@ -131,17 +116,26 @@ app.use(require("./controllers/ProcessController"));
     await conn.authenticate();
     console.log('✅ DB connected');
 
+    // ใช้ alter ตอนพัฒนา ถ้า schema นิ่งแล้วเปลี่ยนเป็น false
     await conn.sync({ alter: true });
     console.log('✅ DB synced');
 
-    const port = 3006;
-    server.listen(port, () => {
-      console.log(`🚀 Server listening on http://localhost:${port}`);
-    });
 
-    io.on('connection', (socket) => {
-      console.log('🔌 socket connected', socket.id);
-      socket.on('disconnect', () => console.log('🔌 socket disconnected', socket.id));
+//------- Start Run Builde fallback all unmatched routes to React index.html
+
+
+// app.get(/.*/, (req, res) => {
+//   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+// });
+
+// app.listen(port, '0.0.0.0', () => {
+//   console.log(`✅ Server is running on http://0.0.0.0:${port}`);
+// });
+
+//------- End Run Builde fallback all unmatched routes to React index.html
+
+    app.listen(port, () => {
+      console.log(`🚀 Server listening on http://localhost:${port}`);
     });
 
 
@@ -150,35 +144,3 @@ app.use(require("./controllers/ProcessController"));
     process.exit(1);
   }
 })();
-
-
-//------ Start Run server on Linux -------------------------------------------
-
-// ========== DB Connect & Start Server ==========
-// (async () => {
-//   try {
-//     await conn.authenticate();
-//     console.log('✅ DB connected');
-
-//     await conn.sync({ alter: true });
-//     console.log('✅ DB synced');
-
-//     const port = 3005;
-//     server.listen(port, '0.0.0.0', () => {
-//       console.log(`🚀 Server is running on http://0.0.0.0:${port}`);
-//     });
-
-//     io.on('connection', (socket) => {
-//       console.log('🔌 socket connected:', socket.id);
-//       socket.on('disconnect', () => {
-//         console.log('🔌 socket disconnected:', socket.id);
-//       });
-//     });
-
-//   } catch (err) {
-//     console.error('❌ DB error:', err);
-//     process.exit(1);
-//   }
-// })();
-
-//------ End Run server on Linux -------------------------------------------
