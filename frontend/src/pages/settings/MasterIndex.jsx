@@ -266,6 +266,10 @@ export default function MasterIndexPage() {
         }
     };
 
+    const AddFileIndex = () => {
+        navigate("/importExcel")
+    }
+
     return (
         <>
             <div className="mt-4">
@@ -277,11 +281,17 @@ export default function MasterIndexPage() {
                         onClick={backPage}>
                         <UndoIcon />
                         BACK</button>
-                    <button
+                    {/* <button
                         className="btn btn-primary ml-3"
                         data-toggle="modal"
                         data-target="#modalIndex"
                         onClick={() => setShowModal(true)}
+                    >
+                        ADD NEW INDEX
+                    </button> */}
+                    <button
+                        className="btn btn-primary ml-3"
+                        onClick={AddFileIndex}
                     >
                         ADD NEW INDEX
                     </button>
@@ -348,7 +358,7 @@ export default function MasterIndexPage() {
                             <th>INVOICE_NO</th>
                             <th>SCRAP_DATE</th>
                             <th>REMARK</th>
-                            <th className="text-black" style={{ width: "11rem" }}>ACTION</th>
+                            {/* <th className="text-black" style={{ width: "11rem" }}>ACTION</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -367,7 +377,7 @@ export default function MasterIndexPage() {
                                 <td>{item.INVOICE_NO}</td>
                                 <td>{item.SCRAP_DATE?.slice(0, 10)}</td>
                                 <td>{item.REMARK}</td>
-                                <td style={{ width: "8rem" }}>
+                                {/* <td style={{ width: "8rem" }}>
                                     <button
                                         className="btn btn-primary"
                                         data-toggle="modal"
@@ -382,7 +392,7 @@ export default function MasterIndexPage() {
                                     >
                                         Delete
                                     </button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>

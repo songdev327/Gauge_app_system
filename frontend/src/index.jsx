@@ -19,6 +19,8 @@ import ModelMaster from './pages/settings/ModelMaster';
 import BorrowGaugeDetail from './pages/settings/BorrowGaugeDetail';
 import Process from './pages/settings/Process';
 import MasterIndexDashboard from './pages/settings/MasterIndexDashboard';
+import ImportExcel from './pages/settings/ImportExcel';
+import ImportDetail from './pages/settings/ImportDetail';
 
 
 const router = createBrowserRouter([
@@ -38,6 +40,8 @@ const router = createBrowserRouter([
   {path: "/processMaster", element: <Process />},
   {path: "/borrowGaugeDetail", element: <BorrowGaugeDetail />},
   {path: "/MasterIndexDashboard", element: <MasterIndexDashboard />},
+  {path: "/importExcel", element: <ImportExcel />},
+  {path: "/importDetail", element: <ImportDetail />},
  
 
   {path: "/mainMenu", element: <MainMenu />},

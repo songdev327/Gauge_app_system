@@ -1,8 +1,9 @@
-#card-setting{
-    background-color: rgb(244, 244, 244);
+#card-setting {
+  background-color: rgb(244, 244, 244);
 }
-#table-detail{
-    border: black;
+
+#table-detail {
+  border: black;
 }
 
 .pagination-wrapper {
@@ -32,7 +33,7 @@
   color: #2c3e50;
   font-family: "Kanit", sans-serif;
   letter-spacing: 0.5px;
-  
+
   width: 100%;
 }
 
@@ -62,6 +63,7 @@
   background-color: #ff0f0f;
   border: solid 1px rgb(163, 163, 163);
 }
+
 .card-success {
   background-color: #28ff19;
   border: solid 1px rgb(163, 163, 163);
@@ -91,21 +93,27 @@
 
 /* 🎛️ กล่องหลักของ Setting */
 #card-setting {
-  border-radius: 15px; /* ขอบโค้งมน */
-  box-shadow: 1px 1px 3px 4px rgb(200, 200, 200); /* เงานุ่ม */
+  border-radius: 15px;
+  /* ขอบโค้งมน */
+  box-shadow: 1px 1px 3px 4px rgb(200, 200, 200);
+  /* เงานุ่ม */
   transition: all 0.3s ease-in-out;
   background: linear-gradient(145deg, #ffffff, #f7f7f7);
- 
+
 }
 
 /* ✨ ปุ่มพื้นฐาน */
 #card-setting .btn {
-  font-size: 1.3rem;               /* ขยายขนาดตัวอักษร */
+  font-size: 1.3rem;
+  /* ขยายขนาดตัวอักษร */
   font-weight: bold;
-  padding: 18px 20px;              /* ขยายขนาดปุ่ม */
+  padding: 18px 20px;
+  /* ขยายขนาดปุ่ม */
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* เงาเริ่มต้น */
-  transition: all 0.25s ease-in-out; /* ทำให้ hover นุ่ม */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* เงาเริ่มต้น */
+  transition: all 0.25s ease-in-out;
+  /* ทำให้ hover นุ่ม */
 }
 
 /* 🌿 ปุ่มสีเขียว */
@@ -122,15 +130,34 @@
 
 /* ✨ เอฟเฟกต์เมื่อ hover */
 #card-setting .btn:hover {
-  transform: translateY(-5px); /* ยกขึ้นเล็กน้อย */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* เพิ่มเงา */
-  filter: brightness(1.1); /* เพิ่มความสว่าง */
+  transform: translateY(-5px);
+  /* ยกขึ้นเล็กน้อย */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  /* เพิ่มเงา */
+  filter: brightness(1.1);
+  /* เพิ่มความสว่าง */
 }
 
 /* 🖱️ เอฟเฟกต์ตอนกด (active) */
 #card-setting .btn:active {
   transform: translateY(1px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#export-excel {
+  background: linear-gradient(135deg, #068e0a, #21a400);
+  border: solid rgb(93, 93, 93) 1px;
+  padding: 18px 20px;
+  font-size: 1.3rem;
+
+}
+
+#export-excel:hover {
+  transform: translateY(-2px);
+  /* ยกขึ้นเล็กน้อย */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  /* เพิ่มเงา */
+  
 }
 
 /* เพิ่มให้กล่องไม่เล็กเกินไปบนหน้าจอเล็ก */

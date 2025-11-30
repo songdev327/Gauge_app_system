@@ -33,7 +33,7 @@ app.get("/masterIndexListPaginate", async (req, res) => {
       where: whereClause,
       offset,
       limit,
-      order: [["id", "DESC"]],
+      order: [["id", "ASC"]],
     });
 
     const totalPages = Math.ceil(count / limit);

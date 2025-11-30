@@ -228,6 +228,10 @@ const Detail = () => {
         }
     };
 
+     const AddFileIndex = () => {
+        navigate("/importDetail")
+    }
+
 
     return (
         <>
@@ -239,10 +243,16 @@ const Detail = () => {
                         onClick={backPage}>
                         <UndoIcon className="mr-1" />
                         BACK</button>
-                    <button
+                    {/* <button
                         data-toggle="modal"
                         data-target="#modalDetail"
                         className="btn btn-primary ml-3"
+                    >
+                        <AddIcon className="mr-1" /> ADD NEW DETAIL
+                    </button> */}
+                    <button
+                        className="btn btn-primary ml-3"
+                        onClick={AddFileIndex}
                     >
                         <AddIcon className="mr-1" /> ADD NEW DETAIL
                     </button>
@@ -296,7 +306,7 @@ const Detail = () => {
                             <th className="text-black">fixasset</th>
                             <th className="text-black">price</th>
                             <th className="text-black">maker</th>
-                            <th className="text-black" style={{ width: "11rem" }}>Action</th>
+                            {/* <th className="text-black" style={{ width: "11rem" }}>Action</th> */}
                         </tr>
                     </thead>
                     <tbody style={{ border: "black", color: "white" }}>
@@ -316,7 +326,7 @@ const Detail = () => {
                                 <td>{d.fixasset}</td>
                                 <td>{d.price}</td>
                                 <td>{d.maker}</td>
-                                <td>
+                                {/* <td>
                                     <button
                                         dat
                                         className="btn btn-primary"
@@ -327,7 +337,7 @@ const Detail = () => {
                                         Edit
                                     </button>
                                     <button className="btn btn-danger ml-1" onClick={() => handleDelete(d.id)}>Delete</button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>

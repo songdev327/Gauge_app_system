@@ -1,8 +1,8 @@
 // import Template from "../../home/Template";
 import { Link } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ReorderIcon from '@mui/icons-material/Reorder';
+import PersonIcon from '@mui/icons-material/Person';
 import './setting.css'
 import TemplatePro from "../../home/TemplatePro"
 
@@ -15,7 +15,7 @@ function Settings() {
       <TemplatePro>
         <div className="signup_container d-flex justify-content-center">
           {/* <div className="register-box"> */}
-          <div className="signup_form w-50">
+          <div className="signup_form w-50 mb-5">
             <div className="card card-outline card-success mt-1" id="card-setting">
               <div className="card-header text-center" id="">
                 <h3 className="h2">
@@ -30,8 +30,8 @@ function Settings() {
                     <div className="col-md-4">
                       <Link to="/userManage">
                         <button className="btn btn-success w-100">
-                          <ExitToAppIcon className="mr-1"/>
-                          REGISTER
+                          <PersonIcon className="mr-1"/>
+                          USER
                         </button>
                       </Link>
                     </div>
@@ -87,6 +87,14 @@ function Settings() {
                         </button>
                       </Link>
                     </div>
+                    {/* <div className="col-md-4 mt-3">
+                      <Link to="/importExcel">
+                        <button className="btn btn-primary w-100">
+                          <ReorderIcon className="mr-1"/>
+                          IMPORT EXCEL
+                        </button>
+                      </Link>
+                    </div> */}
                   </div>
 
                 </form>

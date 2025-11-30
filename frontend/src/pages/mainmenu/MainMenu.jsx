@@ -51,19 +51,19 @@ export default function MainMenu() {
       <>
         <div className="content-wrapper">
           <div className="signup_container d-flex justify-content-center">
-           <div className="signup_form w-50">
-          <div className="menu-box">
-            <h2 className="menu-title"><ReorderIcon className="mr-2" id="icon-list"/>MAIN MENU</h2>
+            <div className="signup_form w-50">
+              <div className="menu-box mb-5">
+                <h2 className="menu-title"><ReorderIcon className="mr-2" id="icon-list" />MAIN MENU</h2>
 
-            <button
-              className="mainmenu-btn"
-              onClick={() => handleClick("ยืม Gauge")}
-            >
-              ยืม Gauge
-            </button>
+                <button
+                  className="mainmenu-btn"
+                  onClick={() => handleClick("ยืม Gauge")}
+                >
+                  ยืม Gauge
+                </button>
+              </div>
+            </div>
           </div>
-         </div>
-         </div>
         </div>
 
 

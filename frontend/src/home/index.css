@@ -1,19 +1,23 @@
 #sidebar-mm{
-    background-color: rgb(231, 231, 231);
+    /* background-color: rgb(231, 231, 231); */
+  background: linear-gradient(135deg,#ffffbe,#faffc7,#f8ffc3,#ffffc7 ,#faffc3,#fffbbe,#feffb7,#feffbb,#ffffbc,#ffffb9,#fdffbc,#f8ffbc);
+
 }
 #sidebar-mm-link {
   background-color: rgb(255, 234, 0);
   color: black;
-  font-weight: 700;
-  display: block; /* ✅ ให้กินพื้นที่เต็ม */
-  padding: 10px 15px; /* ✅ เพิ่ม padding เพื่อให้เงาชัด */
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* ✅ เงาเข้มชัด */
+  font-weight: 600;
+  display: block; 
+  padding: 14px 15px; 
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
   
 }
+
 #sidebar-mm-link {
   position: relative;
   z-index: 10;
 }
+
 #navbar-mm{
     background-color: rgb(255, 234, 0);
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5); /* ✅ เงาเข้มชัด */

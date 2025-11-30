@@ -25,8 +25,6 @@ const port = 3006;
 app.use(cors());
 
 
-
-
 //---- Start ใช้สำหรับ Run Build ---------------------------------------------------
 
 // const corsOptions = {
@@ -59,6 +57,7 @@ require("./models/BorrowGaugeDetailModel");
 require("./models/PartNameModel"); 
 require("./models/ModelMasterModel"); 
 require("./models/ProcessModel"); 
+// require("./models/MasterIndexExcelModel"); 
 
 // ---- Auth ----
 const Auth = require('./controllers/AuthController'); // ✅ ได้เป็นฟังก์ชัน (app)
@@ -76,9 +75,14 @@ app.use(require("./controllers/PartNameController"));
 app.use(require("./controllers/ModelMasterController"));
 app.use(require("./controllers/ProcessController"));
 
+app.use(require("./controllers/MasterIndexExcelController"));
+app.use(require("./controllers/DetailExcelController"));
+
+
 
 
 //-------------- Start Update data base --------------------------------------------------------------
+
 // // อ่านข้อมูลจากไฟล์ JSON และเพิ่มข้อมูลเข้าสู่ฐานข้อมูล // Update data base
 // const loadDetailData = async () => {
 //   try {
@@ -97,18 +101,6 @@ app.use(require("./controllers/ProcessController"));
 // loadDetailData();
 
 //-------------- End Update data base ---------------------------------------------------
-
-
-
-//------ Start Run server on Linux -------------------------------------------
-
-// ========== Fallback to React (สำหรับ React Router) ==========
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
-// });
-
-//------ End Run server on Linux --------------------------------------------
-
 
 
 (async () => {
