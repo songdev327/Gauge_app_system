@@ -100,3 +100,19 @@
 #icon-list{
   font-size: 3rem;
 }
+
+#open-image {
+  background: linear-gradient(135deg, #068e0a, #21a400);
+  border: solid rgb(93, 93, 93) 1px;
+  padding: 12px 18px;
+  font-size: 1.3rem;
+
+}
+
+#open-image:hover {
+  transform: translateY(-2px);
+  /* ยกขึ้นเล็กน้อย */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  /* เพิ่มเงา */
+  
+}

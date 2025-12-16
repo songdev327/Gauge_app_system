@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ReorderIcon from '@mui/icons-material/Reorder';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 
 function SidebarPro() {
@@ -22,21 +23,27 @@ function SidebarPro() {
                         data-accordion="false"
                     >
                         <li class="nav-item mt-2">
-                            <Link to="/dashboardProduct" class="nav-link">
+                            <Link to="/dashboardProduct" className="nav-link sidebar-hover">
                                 <DashboardIcon className='text-black fw-bold' style={{ fontSize: "2rem" }} />
                                 <p className="text-black fw-bold ml-1" style={{ fontSize: "1rem" }}>DASHBOARD</p>
                             </Link>
                         </li>
                         <li class="nav-item mt-3">
-                            <Link to="/mainMenu" class="nav-link">
+                            <Link to="/mainMenu" className="nav-link sidebar-hover">
                                 <ReorderIcon className='text-black fw-bold' style={{ fontSize: "2rem" }} />
                                 <p className="text-black fw-bold ml-1" style={{ fontSize: "1rem" }}>MAIN MENU</p>
                             </Link>
                         </li>
                         <li class="nav-item mt-3">
-                            <Link to="/gaugeListPageRequest" class="nav-link">
+                            <Link to="/gaugeListPageRequest" className="nav-link sidebar-hover">
                                 <ListAltIcon className='text-black fw-bold' style={{ fontSize: "2rem" }} />
                                 <p className="text-black fw-bold ml-1" style={{ fontSize: "1rem" }}>LIST REQUEST</p>
+                            </Link>
+                        </li>
+                        <li class="nav-item mt-3">
+                            <Link to="/gaugeImageList" className="nav-link sidebar-hover">
+                                <InsertPhotoIcon className='fw-bold' id="image-icon" style={{ fontSize: "2rem" }} />
+                                <p className="text-black fw-bold ml-1" style={{ fontSize: "1rem" }}>GAUGE IMAGES</p>
                             </Link>
                         </li>
                         <li class="nav-item"></li>

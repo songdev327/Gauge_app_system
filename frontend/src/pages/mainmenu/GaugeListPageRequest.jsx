@@ -19,7 +19,7 @@ export default function GaugeList() {
     const [filter, setFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedGauge, setSelectedGauge] = useState(null); // ✅ เก็บข้อมูลที่เลือก
-    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     const [searchType, setSearchType] = useState(""); // "item" | "sn" | "control"
     const [snInput, setSnInput] = useState("");
@@ -38,21 +38,24 @@ export default function GaugeList() {
     const [snSuggestions, setSnSuggestions] = useState([]);
     const [controlSuggestions, setControlSuggestions] = useState([]);
 
-    const [countdown, setCountdown] = useState(300); // 300 วินาที = 5 นาที
+    const [selectedGaugeMC, setSelectedGaugeMC] = useState(null);
+    const [newMC, setNewMC] = useState("");
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCountdown(prev => {
-                if (prev <= 1) {
-                    window.location.reload(); // 🔥 Reload หน้า
-                    return 300; // 🔄 รีเซ็ตใหม่ 5 นาที
-                }
-                return prev - 1;
-            });
-        }, 1000);
+    // const [countdown, setCountdown] = useState(300); // 300 วินาที = 5 นาที
 
-        return () => clearInterval(interval);
-    }, []);
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         setCountdown(prev => {
+    //             if (prev <= 1) {
+    //                 window.location.reload(); // 🔥 Reload หน้า
+    //                 return 300; // 🔄 รีเซ็ตใหม่ 5 นาที
+    //             }
+    //             return prev - 1;
+    //         });
+    //     }, 1000);
+
+    //     return () => clearInterval(interval);
+    // }, []);
 
 
     const [formData, setFormData] = useState({
@@ -63,11 +66,11 @@ export default function GaugeList() {
         date_re: "",
     });
 
-    const formatTime = (seconds) => {
-        const min = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const sec = (seconds % 60).toString().padStart(2, '0');
-        return `${min}:${sec}`;
-    };
+    // const formatTime = (seconds) => {
+    //     const min = Math.floor(seconds / 60).toString().padStart(2, '0');
+    //     const sec = (seconds % 60).toString().padStart(2, '0');
+    //     return `${min}:${sec}`;
+    // };
 
     // ✅ ดึงข้อมูลทั้งหมด
     const fetchData = async () => {
@@ -300,13 +303,61 @@ export default function GaugeList() {
         fetchControlSuggestions(value);
     };
 
+    const openChangeMCModal = (gauge) => {
+        setSelectedGaugeMC(gauge);       // เก็บข้อมูลทั้งหมด
+        setNewMC(gauge.mc);             // ใส่ค่า M/C เดิมใน input
+        window.$("#modalChangMC").modal("show"); // เปิด Modal
+    };
+
+    const handleUpdateMC = async () => {
+        if (!selectedGaugeMC) return;
+
+        try {
+            await axios.put(`${config.api_path}/gauge-request/update-mc`, {
+                id: selectedGaugeMC.id,
+                mc: newMC
+            });
+
+            Swal.fire("สำเร็จ!", "อัปเดต M/C เรียบร้อยแล้ว", "success");
+            window.location.reload();
+        } catch (err) {
+            Swal.fire("ผิดพลาด!", "ไม่สามารถอัปเดตได้", "error");
+        }
+    };
+
+
+    const removeItem = (index) => {
+        Swal.fire({
+            title: "ต้องการลบรายการนี้หรือไม่?",
+            text: "เมื่อลบแล้วต้องค้นหาใหม่หากต้องการเพิ่มอีกครั้ง",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "ลบรายการ",
+            cancelButtonText: "ยกเลิก",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setDetailItems((prev) => prev.filter((_, i) => i !== index));
+
+                Swal.fire({
+                    title: "ลบสำเร็จ",
+                    text: "รายการถูกลบออกแล้ว",
+                    icon: "success",
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+            }
+        });
+    };
+
     return (
         <TemplatePro>
 
             <div className="content-wrapper">
 
-                <h2 className="fw-bold mb-4"> <ListAltIcon id="icon-list" /> รายการขอยืม Gauge
-                    ⏱<span style={{ color: "rgba(244, 244, 244, 1)" }}>{formatTime(countdown)}</span>
+                <h2 className="fw-bold mb-4"> <ListAltIcon id="icon-list" /> รายการขอยืม Gauge ( LIST REQUEST )
+                    {/* <span style={{ color: "rgba(244, 244, 244, 1)" }}>{formatTime(countdown)}</span> */}
                 </h2>
 
                 {/* 🔍 Filter */}
@@ -338,7 +389,14 @@ export default function GaugeList() {
                                     <td>{gauge.partName}</td>
                                     <td>{gauge.model}</td>
                                     <td>{gauge.partNo}</td>
-                                    <td>{gauge.mc}</td>
+
+                                    <td
+                                        style={{ cursor: "pointer", color: "blue", fontWeight: "bold" }}
+                                        onClick={() => openChangeMCModal(gauge)}
+                                    >
+                                        {gauge.mc}
+                                    </td>
+
                                     <td>{gauge.rev}</td>
                                     <td className="text-center">
                                         <button
@@ -391,10 +449,10 @@ export default function GaugeList() {
                                     if (!isNaN(newVal)) setItemsPerPage(newVal);
                                 }}
                             >
-                                <option value={5}>5</option>
                                 <option value={10}>10</option>
                                 <option value={20}>20</option>
                                 <option value={50}>50</option>
+                                <option value={100}>100</option>
                             </select>
                         </div>
 
@@ -424,6 +482,39 @@ export default function GaugeList() {
                 )}
 
             </div>
+
+
+            <Modal id="modalChangMC" title="CHANGE MACHINE" modalSize="modal-lg">
+
+                <div className="row">
+                    <div className="col-3">
+                        <label className="ml-2">Doc No.</label>
+                        <input
+                            className="form-control text-primary"
+                            value={selectedGaugeMC?.docNo || ""}
+                            readOnly
+                        />
+                    </div>
+                    <div className="col-5">
+                        <label className="ml-2">M/C</label>
+                        <input
+                            className="form-control text-primary"
+                            value={newMC}
+                            onChange={(e) => setNewMC(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="mt-4">
+                    <button
+                        type="button"
+                        className="btn btn-success col-4"
+                        onClick={handleUpdateMC}
+                    >
+                        CHANGE M/C
+                    </button>
+                </div>
+            </Modal>
 
             {/* ✅ Modal ฟอร์มแสดงข้อมูล */}
             {selectedGauge && (
@@ -760,6 +851,7 @@ export default function GaugeList() {
                                             <th style={{ width: "80px" }}>Serial</th>
                                             <th style={{ width: "120px" }}>Control No.</th>
                                             <th style={{ width: "120px" }}>Type / Model</th>
+                                            <th style={{ width: "80px" }}>Action</th>   {/* ✅ เพิ่มตรงนี้ */}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -773,6 +865,16 @@ export default function GaugeList() {
                                                     <td style={{ color: "blue" }}>{item.serial}</td>
                                                     <td style={{ color: "blue" }}>{item.controlNo}</td>
                                                     <td style={{ color: "blue" }}>{item.typeModel}</td>
+                                                    {/* ปุ่มลบ */}
+                                                    <td>
+                                                        <button
+                                                            className="btn btn-sm btn-danger"
+                                                            onClick={() => removeItem(index)}
+                                                        >
+                                                            ❌
+                                                        </button>
+                                                    </td>
+
                                                 </tr>
                                             ))
                                         ) : (

@@ -2,7 +2,7 @@
 const conn = require("../connect");
 const { DataTypes } = require("sequelize");
 
-const MasterIndexModel = conn.define("master_index", {
+const MasterIndexModel = conn.define("master_indexs", {
 id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },  
   FILE_NAME: DataTypes.STRING,
   SHEET_NAME: DataTypes.STRING,
@@ -18,7 +18,7 @@ id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
   REMARK: DataTypes.STRING,
   
 }, {
-  tableName: "master_index",
+  tableName: "master_indexs",
   timestamps: true, // ✅ ถ้าคุณต้องการ createdAt / updatedAt
 });
 

@@ -126,7 +126,7 @@ app.get("/details", async (req, res) => {
 
     const { count, rows } = await DetailModel.findAndCountAll({
       where: whereClause,
-      order: [["id", "DESC"]],
+      order: [["id", "ASC"]],
       offset: parseInt(offset),
       limit: parseInt(limit),
     });
@@ -171,20 +171,19 @@ app.get("/details/export", async (req, res) => {
     const sheet = workbook.addWorksheet("Details");
 
     sheet.columns = [
-      { header: "ID", key: "id", width: 10 },
-      { header: "Code", key: "code", width: 15 },
-      { header: "Name", key: "name", width: 25 },
-      { header: "Date_Rec", key: "date_rec", width: 15 },
+      { header: "code", key: "code", width: 15 },
+      { header: "name", key: "name", width: 25 },
+      { header: "date_rec", key: "date_rec", width: 15 },
       { header: "Serial", key: "Serial", width: 20 },
-      { header: "Control", key: "control", width: 20 },
-      { header: "Invoice", key: "invoice", width: 20 },
-      { header: "Scrap", key: "scrap", width: 15 },
-      { header: "Model", key: "model", width: 20 },
-      { header: "Sheet", key: "sheet", width: 20 },
-      { header: "Doc_No", key: "doc_no", width: 20 },
-      { header: "Fixasset", key: "fixasset", width: 20 },
-      { header: "Price", key: "price", width: 15 },
-      { header: "Maker", key: "maker", width: 20 },
+      { header: "control", key: "control", width: 20 },
+      { header: "invoice", key: "invoice", width: 20 },
+      { header: "scrap", key: "scrap", width: 15 },
+      { header: "model", key: "model", width: 20 },
+      { header: "sheet", key: "sheet", width: 20 },
+      { header: "doc_no", key: "doc_no", width: 20 },
+      { header: "fixasset", key: "fixasset", width: 20 },
+      { header: "price", key: "price", width: 15 },
+      { header: "maker", key: "maker", width: 20 },
     ];
 
     details.forEach((d) => sheet.addRow(d.dataValues));

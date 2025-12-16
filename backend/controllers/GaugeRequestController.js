@@ -3,6 +3,8 @@ const app = express();
 const ExcelJS = require("exceljs");
 const GaugeRequestModel = require("../models/GaugeRequestModel");
 const BorrowGaugeDetailModel = require("../models/BorrowGaugeDetailModel");
+const DetailModel =  require("../models/DetailModel");
+
 const { Op } = require("sequelize");
 
 // ✅ บันทึกข้อมูลใหม่
@@ -13,6 +15,36 @@ app.post("/gauge-request/create", async (req, res) => {
     res.send({ message: "success", result });
   } catch (e) {
     res.send({ message: e.message });
+  }
+});
+
+app.get("/gauge-request/check-docno", async (req, res) => {
+  try {
+    const { docNo } = req.query;
+
+    const exists = await GaugeRequestModel.findOne({
+      where: { docNo }
+    });
+
+    res.send({ exists: !!exists });
+  } catch (e) {
+    res.status(500).send({ message: e.message });
+  }
+});
+
+app.put("/gauge-request/update-mc", async (req, res) => {
+  try {
+    const { id, mc } = req.body;
+
+    await GaugeRequestModel.update(
+      { mc },
+      { where: { id } }
+    );
+
+    res.json({ message: "success" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "error" });
   }
 });
 
@@ -191,7 +223,7 @@ app.delete("/gauge-request/delete/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
-    // 1️⃣ ดึงข้อมูล docNo ของรายการนี้ก่อน
+    // 1️⃣ ดึงข้อมูล gauge ก่อน
     const gauge = await GaugeRequestModel.findByPk(id);
 
     if (!gauge) {
@@ -200,14 +232,20 @@ app.delete("/gauge-request/delete/:id", async (req, res) => {
 
     const docNo = gauge.docNo;
 
-    // 2️⃣ ลบข้อมูลใน BorrowGaugeDetailModel ที่ doc_No ตรงกับ docNo
-    const BorrowGaugeDetailModel = require("../models/BorrowGaugeDetailModel");
-
+    // 2️⃣ ลบข้อมูลใน BorrowGaugeDetailModel
     await BorrowGaugeDetailModel.destroy({
       where: { doc_No: docNo },
     });
 
-    // 3️⃣ ลบข้อมูลใน GaugeRequestModel
+    // 3️⃣ อัปเดต DetailModel → ตั้งค่า doc_no ให้เป็น null
+    await DetailModel.update(
+      { doc_no: null },
+      {
+        where: { doc_no: docNo }
+      }
+    );
+
+    // 4️⃣ ลบข้อมูลใน GaugeRequestModel
     await GaugeRequestModel.destroy({
       where: { id },
     });
@@ -216,6 +254,7 @@ app.delete("/gauge-request/delete/:id", async (req, res) => {
       message: "success",
       deletedDocNo: docNo,
     });
+
   } catch (e) {
     console.error(e);
     res.status(500).send({ message: e.message });

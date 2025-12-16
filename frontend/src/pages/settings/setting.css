@@ -160,6 +160,25 @@
   
 }
 
+#master-img{
+  background-color: #ffef9f;
+  padding: 0.2rem;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  border-radius: 5px;
+  border: solid rgb(101, 101, 101) 1px;
+}
+.border-box{
+  border: solid rgb(147, 147, 147) 1px;
+  padding: 1.5rem;
+   border-radius: 5px;
+}
+
+#gauge-detail-img{
+  border-radius: 8px;
+}
+
 /* เพิ่มให้กล่องไม่เล็กเกินไปบนหน้าจอเล็ก */
 @media (max-width: 576px) {
   .col-6 {

@@ -17,17 +17,64 @@ app.get("/masterIndexListAll", async (req, res) => {
 });
 
 
+// app.get("/masterIndexListPaginate", async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = parseInt(req.query.limit) || 10;
+//     const offset = (page - 1) * limit;
+//     const fileName = req.query.fileName || "";
+//     const sheetName = req.query.sheetName || "";
+
+//     const whereClause = {};
+//     if (fileName) whereClause.FILE_NAME = { [Op.iLike]: `%${fileName}%` };
+//     if (sheetName) whereClause.SHEET_NAME = { [Op.iLike]: `%${sheetName}%` };
+
+//     const { count, rows } = await MasterIndexModel.findAndCountAll({
+//       where: whereClause,
+//       offset,
+//       limit,
+//       order: [["id", "ASC"]],
+//     });
+
+//     const totalPages = Math.ceil(count / limit);
+
+//     res.json({
+//       results: rows,
+//       totalPages,
+//       currentPage: page,
+//       totalCount: count,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: "ดึงข้อมูลแบบแบ่งหน้าไม่สำเร็จ", detail: err.message });
+//   }
+// });
+
 app.get("/masterIndexListPaginate", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
+
     const fileName = req.query.fileName || "";
     const sheetName = req.query.sheetName || "";
+    const sn = req.query.sn || "";   // ✅ เพิ่มรับค่า S_N
 
     const whereClause = {};
-    if (fileName) whereClause.FILE_NAME = { [Op.iLike]: `%${fileName}%` };
-    if (sheetName) whereClause.SHEET_NAME = { [Op.iLike]: `%${sheetName}%` };
+
+    // เงื่อนไข FILE_NAME
+    if (fileName) {
+      whereClause.FILE_NAME = { [Op.iLike]: `%${fileName}%` };
+    }
+
+    // เงื่อนไข SHEET_NAME
+    if (sheetName) {
+      whereClause.SHEET_NAME = { [Op.iLike]: `%${sheetName}%` };
+    }
+
+    // ✅ เพิ่มเงื่อนไขค้นหา S_N (รองรับตัวเล็ก/ตัวใหญ่)
+    if (sn) {
+      whereClause.S_N = { [Op.iLike]: `%${sn}%` };
+    }
 
     const { count, rows } = await MasterIndexModel.findAndCountAll({
       where: whereClause,
@@ -45,7 +92,10 @@ app.get("/masterIndexListPaginate", async (req, res) => {
       totalCount: count,
     });
   } catch (err) {
-    res.status(500).json({ error: "ดึงข้อมูลแบบแบ่งหน้าไม่สำเร็จ", detail: err.message });
+    res.status(500).json({
+      error: "ดึงข้อมูลแบบแบ่งหน้าไม่สำเร็จ",
+      detail: err.message,
+    });
   }
 });
 

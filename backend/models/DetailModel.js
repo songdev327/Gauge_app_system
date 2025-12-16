@@ -2,7 +2,7 @@
 const conn = require("../connect");
 const { DataTypes } = require("sequelize");
 
-const DetailModel = conn.define("detail", {
+const DetailModel = conn.define("detail_gauges", {
 id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },  
   code: DataTypes.STRING,
   name: DataTypes.STRING,
@@ -19,7 +19,7 @@ id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
   maker: DataTypes.STRING,
   
 }, {
-  tableName: "detail",
+  tableName: "detail_gauges",
   timestamps: true, // ✅ ถ้าคุณต้องการ createdAt / updatedAt
 });
 

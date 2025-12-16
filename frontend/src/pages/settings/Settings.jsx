@@ -79,6 +79,14 @@ function Settings() {
                         </button>
                       </Link>
                     </div>
+                      <div className="col-md-4 mt-3">
+                      <Link to="/gaugeImage">
+                        <button className="btn btn-success w-100">
+                          <ReorderIcon className="mr-1"/>
+                          ADD IMAGE
+                        </button>
+                      </Link>
+                    </div>
                     <div className="col-md-4 mt-3">
                       <Link to="/borrowGaugeDetail">
                         <button className="btn btn-primary w-100">
@@ -86,15 +94,7 @@ function Settings() {
                           BORROW GAUGE
                         </button>
                       </Link>
-                    </div>
-                    {/* <div className="col-md-4 mt-3">
-                      <Link to="/importExcel">
-                        <button className="btn btn-primary w-100">
-                          <ReorderIcon className="mr-1"/>
-                          IMPORT EXCEL
-                        </button>
-                      </Link>
-                    </div> */}
+                    </div>       
                   </div>
 
                 </form>

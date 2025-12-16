@@ -4,8 +4,6 @@ const conn = require('./connect');
 const app = express();
 const port = 3006;
 
-
-
 //-------------- Start Update data base ----------------------------------------------------
 
 // const fs = require('fs'); // Update data base
@@ -14,15 +12,18 @@ const port = 3006;
 
 //-------------- End Update data base --------------------------------------------------------------
 
-
-
 //---- Start ใช้สำหรับ Run Build ---------------------------------------------------
 
 // const path = require("path");
 
 //---- End ใช้สำหรับ Run Build ---------------------------------------------------
 
+
+//--- Start Dev ------------------------------------------------------------
+
 app.use(cors());
+
+//--- End Dev -------------------------------------------------------------
 
 
 //---- Start ใช้สำหรับ Run Build ---------------------------------------------------
@@ -31,7 +32,7 @@ app.use(cors());
 //   origin: [
 //     'http://localhost:3006',           // local dev
 //     'http://10.120.123.25:3006',       // IP ที่คุณต้องการอนุญาต
-//     'http://192.168.96.124:3006'       // ปัจจุบันที่คุณใช้
+//     'http://192.168.96.126:3006'       // ปัจจุบันที่คุณใช้
 //   ],
 //   credentials: true
 // };
@@ -40,6 +41,7 @@ app.use(cors());
 //---- End ใช้สำหรับ Run Build ---------------------------------------------------
 
 app.use(express.json());
+app.use("/uploadproduction", express.static("uploadproduction"));
 
 //---- Start ใช้สำหรับ Run Build ---------------------------------------------------
 
@@ -57,6 +59,7 @@ require("./models/BorrowGaugeDetailModel");
 require("./models/PartNameModel"); 
 require("./models/ModelMasterModel"); 
 require("./models/ProcessModel"); 
+require("./models/GaugeImageModel"); 
 // require("./models/MasterIndexExcelModel"); 
 
 // ---- Auth ----
@@ -78,11 +81,12 @@ app.use(require("./controllers/ProcessController"));
 app.use(require("./controllers/MasterIndexExcelController"));
 app.use(require("./controllers/DetailExcelController"));
 
+app.use(require("./controllers/GaugeImageController"));
+
 
 
 
 //-------------- Start Update data base --------------------------------------------------------------
-
 // // อ่านข้อมูลจากไฟล์ JSON และเพิ่มข้อมูลเข้าสู่ฐานข้อมูล // Update data base
 // const loadDetailData = async () => {
 //   try {
@@ -126,9 +130,13 @@ app.use(require("./controllers/DetailExcelController"));
 
 //------- End Run Builde fallback all unmatched routes to React index.html
 
+
+//---- Start Dev ---------------------------------------------------------
     app.listen(port, () => {
       console.log(`🚀 Server listening on http://localhost:${port}`);
     });
+
+//---- End Dev ---------------------------------------------------------
 
 
   } catch (err) {

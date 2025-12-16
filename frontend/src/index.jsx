@@ -21,6 +21,8 @@ import Process from './pages/settings/Process';
 import MasterIndexDashboard from './pages/settings/MasterIndexDashboard';
 import ImportExcel from './pages/settings/ImportExcel';
 import ImportDetail from './pages/settings/ImportDetail';
+import GaugeImage from './pages/settings/GaugeImage';
+import GaugeImageList from './pages/mainmenu/GaugeImageList';
 
 
 const router = createBrowserRouter([
@@ -42,6 +44,9 @@ const router = createBrowserRouter([
   {path: "/MasterIndexDashboard", element: <MasterIndexDashboard />},
   {path: "/importExcel", element: <ImportExcel />},
   {path: "/importDetail", element: <ImportDetail />},
+
+  {path: "/gaugeImage", element: <GaugeImage />},
+  {path: "/gaugeImageList", element: <GaugeImageList />},
  
 
   {path: "/mainMenu", element: <MainMenu />},

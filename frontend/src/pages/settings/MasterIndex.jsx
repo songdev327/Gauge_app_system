@@ -18,6 +18,7 @@ export default function MasterIndexPage() {
     const [form, setForm] = useState({});
     const [editingId, setEditingId] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [snFilter, setSnFilter] = useState(""); //add
 
     const [fileNameFilter, setFileNameFilter] = useState("");
     const [fileNameOptions, setFileNameOptions] = useState([]);
@@ -56,6 +57,7 @@ export default function MasterIndexPage() {
                     limit: itemsPerPage,
                     fileName: fileNameFilter,
                     sheetName: sheetNameFilter,
+                    sn: snFilter, // ✅ เพิ่มตรงนี้
                 },
             });
             setItems(res.data.results);
@@ -296,6 +298,12 @@ export default function MasterIndexPage() {
                         ADD NEW INDEX
                     </button>
 
+                    <button className="col-2 ml-3 btn btn-success"
+                        onClick={() => navigate("/MasterIndexDashboard")}
+                    >
+                        <DashboardIcon className="mr-1" />DASHBOARD
+                    </button>
+
 
                 </div>
 
@@ -326,7 +334,19 @@ export default function MasterIndexPage() {
                         ))}
                     </select>
 
-                    <button className="col-1 btn btn-primary ml-3" onClick={() => { setCurrentPage(1); fetchData(); }}>
+                    <input
+                        className="form-control col-2 ml-2"
+                        placeholder="Search S_N ...."
+                        value={snFilter}
+                        onChange={(e) => setSnFilter(e.target.value)}
+                    />
+
+                    <button className="col-1 btn btn-primary ml-3"
+                        onClick={() => {
+                            setCurrentPage(1);
+                            fetchData();
+                        }}
+                    >
                         <ManageSearchIcon className="mr-1" /> SEARCH
                     </button>
                     <button className="col-1 ml-3 btn btn-danger" onClick={resetPage}>
@@ -335,11 +355,7 @@ export default function MasterIndexPage() {
                     <button className="col-2 ml-3 btn btn-success" onClick={handleExportExcel}>
                         <SystemUpdateAltIcon className="mr-1" />EXPORT EXCEL
                     </button>
-                    <button className="col-2 ml-3 btn btn-success"
-                     onClick={() => navigate("/MasterIndexDashboard")}
-                     >
-                       <DashboardIcon className="mr-1"/>DASHBOARD
-                    </button>
+
                 </div>
 
                 <table className="table table-bordered table-striped border-black table-bordered-black">
