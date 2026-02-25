@@ -25,16 +25,45 @@ export default function ImportDetail() {
             });
 
             Swal.fire({
-             icon:"✅ สำเร็จ",
-             title: "success", 
-             text: res.data.message,
-             timer: 5000        
+                icon: "✅ สำเร็จ",
+                title: "success",
+                text: res.data.message,
+                timer: 5000
             });
             window.location.reload();
+
         } catch (err) {
-            Swal.fire("❌ ผิดพลาด", "ไม่สามารถนำเข้าไฟล์ได้", "error");
+            const data = err?.response?.data;
+
+            if (err?.response?.status === 400 && data?.details) {
+                const { expected, found, missingInExcel, extraInExcel } = data.details;
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "หัวตารางไม่ตรง (DETAIL)",
+                    html: `
+        <div style="text-align:left">
+          <b>Expected (DB):</b><br/>
+          ${(expected || []).join(", ") || "-"}<br/><br/>
+
+          <b>Found (Excel):</b><br/>
+          ${(found || []).filter(Boolean).join(", ") || "-"}<br/><br/>
+
+          <b>Missing in Excel:</b><br/>
+          ${(missingInExcel || []).join(", ") || "-"}<br/><br/>
+
+          <b>Extra in Excel:</b><br/>
+          ${(extraInExcel || []).join(", ") || "-"}
+        </div>
+      `,
+                });
+                return;
+            }
+
+            Swal.fire("❌ ผิดพลาด", data?.message || "ไม่สามารถนำเข้าไฟล์ได้", "error");
             console.error(err);
         }
+        
     };
 
     return (

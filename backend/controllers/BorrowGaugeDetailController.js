@@ -9,35 +9,7 @@ const DetailModel = require("../models/DetailModel"); // ✅ เพิ่ม imp
 
 const { Op } = require("sequelize");
 
-// ✅ เพิ่มข้อมูลหลายรายการ
-// app.post("/addMany", async (req, res) => {
-//   try {
-//     const { doc_No, items } = req.body;
 
-//     if (!doc_No || !Array.isArray(items) || items.length === 0) {
-//       return res.status(400).json({ message: "ข้อมูลไม่ถูกต้อง" });
-//     }
-
-//     // ✅ สร้าง records สำหรับ insert
-//     const records = items.map((item) => ({
-//       doc_No,
-//       item_no: item.itemNo,
-//       item_name: item.itemName,
-//       qty: item.qty,
-//       serial: item.serial,
-//       control: item.controlNo,
-//       model: item.typeModel,
-//     }));
-
-//     // ✅ บันทึกลงฐานข้อมูล
-//     await BorrowGaugeDetailModel.bulkCreate(records);
-
-//     res.json({ message: "เพิ่มข้อมูลสำเร็จ", count: records.length });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "ไม่สามารถเพิ่มข้อมูลได้", error: error.message });
-//   }
-// });
 
 // ✅ เพิ่มข้อมูลหลายรายการ
 app.post("/addMany", async (req, res) => {
@@ -65,15 +37,24 @@ app.post("/addMany", async (req, res) => {
     // ✅ อัปเดตตาราง DetailModel ใส่ doc_no
     let updateCount = 0;
     for (const item of items) {
+      // ✅ สร้างเงื่อนไขการค้นหาแบบ Dynamic (Prioritize Control No.)
+      const whereCondition = {};
+
+      // ถ้ามี Control No. ใช้ Control No. เจาะจงไปเลย (Unique กว่า)
+      if (item.controlNo && item.controlNo !== "-" && item.controlNo.trim() !== "") {
+        whereCondition.control = item.controlNo;
+      }
+      // ถ้าไม่มี Control No. ค่อยใช้ Serial
+      else if (item.serial && item.serial !== "-" && item.serial.trim() !== "") {
+        whereCondition.Serial = item.serial;
+      } else {
+        continue;
+      }
+
       const [affected] = await DetailModel.update(
         { doc_no: doc_No },
         {
-          where: {
-            [Op.or]: [
-              { Serial: item.serial },
-              { control: item.controlNo },
-            ],
-          },
+          where: whereCondition,
         }
       );
       if (affected > 0) updateCount++;
@@ -93,42 +74,10 @@ app.post("/addMany", async (req, res) => {
   }
 });
 
-// // ✅ อัปเดตสถานะ Return Gauge
-// app.put("/borrow/update-return", async (req, res) => {
-//   try {
-//     const { doc_No, items, rec_return, name_rec, lastname_rec, typemc_rec, date_re } = req.body;
-
-//     if (!doc_No || !Array.isArray(items) || items.length === 0) {
-//       return res.status(400).json({ message: "ข้อมูลไม่ถูกต้อง" });
-//     }
-
-//     let count = 0;
-//     for (const item of items) {
-//       const result = await BorrowGaugeDetailModel.update(
-//         {
-//           return: "Y",
-//           rec_return: rec_return || null,
-//           name_rec: name_rec || null,
-//           lastname_rec: lastname_rec || null,
-//           typemc_rec: typemc_rec || null,
-//           date_re: date_re || null,
-//         },
-//         { where: { doc_No, serial: item.serial } }
-//       );
-
-//       if (result[0] > 0) count++;
-//     }
-
-//     res.json({ message: "success", count });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "error", error: error.message });
-//   }
-// });
 
 app.put("/borrow/update-return", async (req, res) => {
   try {
-    const { doc_No, items, rec_return, name_rec, lastname_rec, typemc_rec, date_re } = req.body;
+    const { doc_No, items, rec_return, name_rec, lastname_rec, typemc_rec, date_re, } = req.body;
 
     if (!doc_No || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: "ข้อมูลไม่ถูกต้อง" });
@@ -138,42 +87,67 @@ app.put("/borrow/update-return", async (req, res) => {
     let resetCount = 0;
 
     for (const item of items) {
-      // ✅ อัปเดต BorrowGaugeDetailModel ให้ return = 'Y'
+      // ✅ 1. อัปเดต BorrowGaugeDetailModel ให้ return = 'Y'
+      // ใช้ id ดีที่สุด ถ้าไม่มีให้ใช้ doc_No + serial/control
+      let whereClause;
+      if (item.id) {
+        whereClause = { id: item.id };
+      } else {
+        whereClause = { doc_No };
+        if (item.serial) whereClause.serial = item.serial;
+        if (item.control) whereClause.control = item.control;
+        if (item.item_no) whereClause.item_no = item.item_no;
+      }
+
+      const isReturned = item.return && item.return.trim() !== "";
+
       const result = await BorrowGaugeDetailModel.update(
         {
-          return: "Y",
-          rec_return: rec_return || null,
-          name_rec: name_rec || null,
-          lastname_rec: lastname_rec || null,
-          typemc_rec: typemc_rec || null,
-          date_re: date_re || null,
+          return: item.return,
+          rec_return: isReturned ? (item.rec_return || rec_return || null) : null,
+          name_rec: isReturned ? (item.name_rec || name_rec || null) : null,
+          lastname_rec: isReturned ? (item.lastname_rec || lastname_rec || null) : null,
+          typemc_rec: isReturned ? (item.typemc_rec || typemc_rec || null) : null,
+          date_re: isReturned ? (item.date_re || date_re || null) : null,
         },
-        { where: { doc_No, serial: item.serial } }
+        { where: whereClause }
       );
 
       if (result[0] > 0) {
         count++;
 
-        // ✅ อัปเดต DetailModel ให้เคลียร์ doc_no (ระบุชื่อคอลัมน์ที่ตรงกับ DB)
-        const [affected] = await DetailModel.update(
-          { doc_no: null },
-          {
-            where: {
-              [Op.and]: [
-                {
-                  [Op.or]: [
-                    { control: item.control },
-                    // ✅ ใช้ col("Serial") เพื่อชี้คอลัมน์ตัวใหญ่จริงในฐานข้อมูล
-                    { Serial: item.serial },
-                  ],
-                },
-                { doc_no: String(doc_No) },
-              ],
-            },
+        // ✅ 2. อัปเดต DetailModel (Inventory)
+        // ต้องค้นหาแค่ 1 รายการแล้วอัปเดต (เพื่อป้องกันการคืนซ้ำซ้อนกรณีของเหมือนกันหลายชิ้น)
+        // update 2024-01-16: ต้องเช็คว่ามีการคืนจริงๆ (isReturned) ถึงจะลบ doc_no ออก
+        if (isReturned) {
+          const conditions = [];
+          // ถ้ามี Control No ใช้ Control No เป็นหลักในการค้นหา
+          if (item.control && item.control !== "-" && item.control.trim() !== "") {
+            conditions.push({ control: item.control });
           }
-        );
+          // ถ้ามี Serial ใช้ Serial ในการค้นหา (Serial ควรจะ Unique กว่า)
+          if (item.serial && item.serial !== "-" && item.serial.trim() !== "") {
+            conditions.push({ Serial: item.serial });
+          }
 
-        if (affected > 0) resetCount++;
+          if (conditions.length > 0) {
+            // ค้นหา record เดียวที่ตรงกับ doc_no นี้ และเงื่อนไข item
+            const targetItem = await DetailModel.findOne({
+              where: {
+                [Op.and]: [
+                  { [Op.or]: conditions },
+                  { doc_no: String(doc_No) },
+                ],
+              },
+            });
+
+            // ถ้าเจอ ให้เคลียร์ doc_no แค่รายการเดียว
+            if (targetItem) {
+              await targetItem.update({ doc_no: null });
+              resetCount++;
+            }
+          }
+        }
       }
     }
 
@@ -187,7 +161,6 @@ app.put("/borrow/update-return", async (req, res) => {
     res.status(500).json({ message: "error", error: error.message });
   }
 });
-
 
 
 
@@ -216,7 +189,7 @@ app.get("/list", async (req, res) => {
 
     const requests = await GaugeRequestModel.findAll({
       // attributes: ["docNo", "requestBy", "issueBy", "receivedBy" , "section"],
-      attributes: ["docNo", "name", "name_issue", "name_received" , "section"],
+      attributes: ["docNo", "name", "name_issue", "name_received", "section"],
     });
 
     // รวมข้อมูลทั้งสองตาราง

@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import "./Dashboard.css"
 import TemplatePro from "../../home/TemplatePro";
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import Modal from "../modals/Modal";
 
 export default function Dashboard() {
   const [details, setDetails] = useState([]);
@@ -15,6 +16,7 @@ export default function Dashboard() {
   const [totalReturned, setTotalReturned] = useState(0);
   const [totalDocNo, setTotalDocNo] = useState(0);
   const [barData, setBarData] = useState([]);
+  const [docList, setDocList] = useState([]); // ✅ เก็บรายการเอกสาร
 
   const [countdown, setCountdown] = useState(300); // 300 วินาที = 5 นาที
 
@@ -50,6 +52,7 @@ export default function Dashboard() {
         const records = res.data.result;
 
         // คำนวณข้อมูลสรุป
+        setDetails(records); // ✅ เก็บข้อมูลทั้งหมดไว้แสดงใน Modal
         setTotalRecords(records.length);
         setScrapCount(records.filter(r => r.scrapDate).length);
         setTotalReturned(records.filter(r => r.date_re).length);
@@ -73,6 +76,25 @@ export default function Dashboard() {
     }
   };
 
+  const handleDocNoClick = async () => {
+    try {
+      const res = await axios.get(`${config.api_path}/gauge-request/list`);
+      if (res.data.message === "success") {
+        setDocList(res.data.result);
+        const modal = new window.bootstrap.Modal(document.getElementById("modalDocList"));
+        modal.show();
+      }
+    } catch (err) {
+      console.error("Error fetching doc list:", err);
+      Swal.fire("Error", "Unable to fetch document list", "error");
+    }
+  };
+
+  const handleTotalRecordsClick = () => {
+    const modal = new window.bootstrap.Modal(document.getElementById("modalTotalRecords"));
+    modal.show();
+  };
+
   const COLORS = ["#007bff", "#ff5733", "#28a745", "#8e44ad"];
 
 
@@ -81,22 +103,30 @@ export default function Dashboard() {
     <>
       <TemplatePro>
         <div className="content-wrapper">
-          <h2 className="fw-bold text-dark mb-4"><DashboardIcon id="icon-dashboard"/> DASHBOARD - BORROW GAUGE
+          <h2 className="fw-bold text-dark mb-4"><DashboardIcon id="icon-dashboard" /> DASHBOARD - BORROW GAUGE
             ⏱<span style={{ color: "rgba(244, 244, 244, 1)" }}>{formatTime(countdown)}</span>
           </h2>
 
           {/* สรุปข้อมูล */}
           <div className="row mb-4">
             <div className="col-md-3">
-              <div className="stat-total p-3 rounded text-center" id="doc-no" 
-              style={{ backgroundColor: "#8e44ad" }}
+              <div
+                className="stat-total p-3 rounded text-center"
+                id="doc-no"
+                style={{ backgroundColor: "#8e44ad", cursor: "pointer" }}
+                onClick={handleDocNoClick}
               >
                 <h5 className="fw-bold text-white">DOC NO</h5>
                 <h3 className="fw-bold text-white">{totalDocNo}</h3>
               </div>
             </div>
             <div className="col-md-3">
-              <div className="stat-total p-3 rounded text-center" id="total-record" style={{ backgroundColor: "#007bff" }}>
+              <div
+                className="stat-total p-3 rounded text-center"
+                id="total-record"
+                style={{ backgroundColor: "#007bff", cursor: "pointer" }}
+                onClick={handleTotalRecordsClick}
+              >
                 <h5 className="fw-bold text-white">TOTAL RECORDS</h5>
                 <h3 className="fw-bold text-white">{totalRecords}</h3>
               </div>
@@ -191,13 +221,85 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-
-
-
           </div>
 
-
         </div>
+
+        {/* ✅ Modal แสดงรายการ DOC NO */}
+        <Modal id="modalDocList" title="LIST GAUGE REQUEST ( DOC NO )" modalSize="modal-xl">
+          <div className="table-responsive">
+            <table className="table table-bordered table-striped text-center">
+              <thead className="table-dark">
+                <tr>
+                  <th>No.</th>
+                  <th>Doc No.</th>
+                  <th>Date</th>
+                  <th>Request By</th>
+                  <th>Machine</th>
+                  <th>Section</th>
+                </tr>
+              </thead>
+              <tbody>
+                {docList.length > 0 ? (
+                  docList.map((item, index) => (
+                    <tr key={item.id}>
+                      <td>{index + 1}</td>
+                      <td className="fw-bold text-primary">{item.docNo}</td>
+                      <td>{item.date}</td>
+                      <td>{item.name}</td>
+                      <td>{item.mc}</td>
+                      <td>{item.section}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-muted">ไม่พบข้อมูล</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Modal>
+
+        {/* ✅ Modal แสดงรายการ TOTAL RECORDS */}
+        <Modal id="modalTotalRecords" title="LIST TOTAL RECORDS ( BORROW GAUGE )" modalSize="modal-xl">
+          <div className="table-responsive" style={{ maxHeight: "70vh", overflowY: "auto" }}>
+            <table className="table table-bordered table-striped text-center">
+              <thead className="table-dark" style={{ position: "sticky", top: 0 }}>
+                <tr>
+                  <th>No.</th>
+                  <th>Doc No.</th>
+                  <th>Item No.</th>
+                  <th>Item Name</th>
+                  <th>Serial</th>
+                  <th>Control No.</th>
+                  <th>Model</th>
+                </tr>
+              </thead>
+              <tbody>
+                {details.length > 0 ? (
+                  details.map((item, index) => (
+                    <tr key={item.id}>
+                      <td>{index + 1}</td>
+                      <td className="fw-bold text-danger">{item.doc_No}</td>
+                      <td>{item.item_no}</td>
+                      <td className="text-left">{item.item_name}</td>
+                      <td>{item.serial}</td>
+                      <td className="text-primary fw-bold">{item.control}</td>
+                      <td>{item.model}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-muted">ไม่พบข้อมูล</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Modal>
+        
+
       </TemplatePro>
     </>
   );

@@ -11,6 +11,7 @@ function ModalQCInspection(props) {
     const closeModal = () => {
       window.location.reload();
     };
+    
   
     return (
       <>
@@ -42,6 +43,7 @@ function ModalQCInspection(props) {
       </>
     );
   }
+
   
   export default ModalQCInspection;
   

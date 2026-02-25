@@ -309,7 +309,7 @@ const Detail = () => {
                             {/* <th className="text-black" style={{ width: "11rem" }}>Action</th> */}
                         </tr>
                     </thead>
-                    <tbody style={{ border: "black", color: "white" }}>
+                    <tbody style={{ border: "black"}}>
                         {details.map((d, i) => (
                             <tr key={d.id}>
                                 <td>{(page - 1) * limit + i + 1}</td>

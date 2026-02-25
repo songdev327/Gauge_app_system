@@ -48,7 +48,7 @@ export default function UserManage() {
     setEditingId(null);
   };
 
- const submit = async (e) => {
+  const submit = async (e) => {
     e?.preventDefault?.();
     try {
       if (editingId) {
@@ -78,7 +78,7 @@ export default function UserManage() {
         confirmButtonText: "ตกลง"
       });
     }
-};
+  };
 
 
   const editRow = (u) => {
@@ -159,7 +159,7 @@ export default function UserManage() {
     }
   };
 
- 
+
   return (
     <>
       <TemplatePro>
@@ -242,14 +242,14 @@ export default function UserManage() {
               <button className="btn btn-success" type="submit">{editingId ? "UPDATE" : "CREATE"}</button>
               {editingId && <button className="btn btn-danger ml-2" type="button" onClick={resetForm}>Cancel</button>}
             </div>
-          
+
           </form>
-          <button 
-          className="btn btn-success mb-3 mt-2 ml-2" 
-          onClick={exportToExcel}
+          <button
+            className="btn btn-success mb-3 mt-2 ml-2"
+            onClick={exportToExcel}
           >
-            <SystemUpdateAltIcon className="mr-1"/>EXPORT EXCEL
-            </button>
+            <SystemUpdateAltIcon className="mr-1" />EXPORT EXCEL
+          </button>
 
           <table className="table table-striped table-bordered table-bordered-black text-center">
             <thead className="table-dark">
@@ -278,10 +278,10 @@ export default function UserManage() {
                   <td>{u.permissions || "-"}</td>
                   <td>{u.process || "-"}</td>
                   <td>
-                   
-                      <button className="btn btn-primary" onClick={() => editRow(u)}>Edit</button>
-                      <button className="btn btn-danger ml-2" onClick={() => removeRow(u)}>Delete</button>
-                   
+
+                    <button className="btn btn-primary" onClick={() => editRow(u)}>Edit</button>
+                    <button className="btn btn-danger ml-2" onClick={() => removeRow(u)}>Delete</button>
+
                   </td>
                 </tr>
               ))}

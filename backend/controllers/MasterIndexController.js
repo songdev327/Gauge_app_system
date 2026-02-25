@@ -142,7 +142,7 @@ app.get("/masterIndex/export", async (req, res) => {
     const worksheet = workbook.addWorksheet("Master Index");
 
     worksheet.columns = [
-      { header: "ID", key: "id", width: 10 },
+      // { header: "ID", key: "id", width: 10 },
       { header: "FILE_NAME", key: "FILE_NAME", width: 25 },
       { header: "SHEET_NAME", key: "SHEET_NAME", width: 25 },
       { header: "DATE_RECEIVED", key: "DATE_RECEIVED", width: 20 },

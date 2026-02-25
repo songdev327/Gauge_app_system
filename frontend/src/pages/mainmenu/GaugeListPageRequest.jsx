@@ -432,7 +432,7 @@ export default function GaugeList() {
                     </tbody>
                 </table>
 
-                {/* 📑 Pagination */}
+
                 {/* 📑 Pagination */}
                 {filteredGauges.length > 0 && (
                     <div className="d-flex justify-content-between align-items-center mt-4 mb-3">
@@ -645,7 +645,19 @@ export default function GaugeList() {
 
                                                         // ✅ เพิ่มข้อมูลเข้า table ด้านล่าง (ถ้าไม่ซ้ำ)
                                                         setDetailItems((prev) => {
-                                                            if (prev.some((p) => p.serial === data.Serial)) return prev;
+                                                            // ✅ เช็คซ้ำ: ถ้ามี Control No ให้เช็ค Control No เป็นหลัก
+                                                            const isDuplicate = prev.some((p) => {
+                                                                if (data.control && data.control !== "-" && data.control.trim() !== "") {
+                                                                    return p.controlNo === data.control;
+                                                                }
+                                                                if (data.Serial && data.Serial !== "-" && data.Serial.trim() !== "") {
+                                                                    return p.serial === data.Serial;
+                                                                }
+                                                                return p.controlNo === data.control;
+                                                            });
+
+                                                            if (isDuplicate) return prev;
+
                                                             return [
                                                                 ...prev,
                                                                 {
@@ -1122,16 +1134,8 @@ export default function GaugeList() {
                                     className="btn btn-success ml-2"
                                     onClick={async () => {
                                         try {
-                                            const itemsToUpdate = updatedDetails.filter((d) => d.return === "Y");
-                                            if (itemsToUpdate.length === 0) {
-                                                Swal.fire({
-                                                    title: "แจ้งเตือน",
-                                                    text: "กรุณาใส่ค่า Return = 'Y' อย่างน้อยหนึ่งรายการก่อนบันทึก",
-                                                    icon: "warning",
-                                                    confirmButtonText: "ตกลง",
-                                                });
-                                                return;
-                                            }
+                                            // ✅ ส่งข้อมูลทั้งหมดไปตรวจสอบแก้ไข (รวมถึงค่าว่างที่ต้องการลบออก)
+                                            const itemsToUpdate = updatedDetails;
 
                                             if (!formData.rec_return || !formData.date_re) {
                                                 Swal.fire({
@@ -1241,8 +1245,6 @@ export default function GaugeList() {
                     <div className="text-center py-5">กำลังโหลดข้อมูล...</div>
                 )}
             </Modal>
-
-
         </TemplatePro>
     );
 }
